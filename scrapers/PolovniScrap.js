@@ -30,7 +30,7 @@ class PolovniScrap {
 
         })
         .then(() => {
-            setTimeout(this.scrapeLoop, 30000)
+            setTimeout(this.scrapeLoop.bind(this), 30000)
         })
         .catch( (error) => {
             console.log(error);
@@ -38,10 +38,9 @@ class PolovniScrap {
     }
 
     scrapeCar(url) {
-
-        axios.get(url, {
-
-        }).then((response) => {
+        
+        axios.get(url)
+        .then((response) => {
 
             if(response.status == 200) {
 
@@ -64,10 +63,9 @@ class PolovniScrap {
                         vals.push($(elem).text())
                     }
                 });
-
+                
                 for(let i=0; i<keys.length; i++){
-                    if(keys[i] === 'Broj oglasa') {
-                        //.*[:]\s*(\d+)
+                    if(keys[i] === 'Broj oglasa: ') {
                         vals[i] = parseInt(vals[i].replace(/\s*.*[:]\s*(\d+)\s*/g, '$1'));
                     }
                     carObj[keys[i]] = vals[i]
@@ -97,28 +95,32 @@ class PolovniScrap {
                 let carSafety = $('h2').filter(function() {
                     return $(this).text().trim() === 'Sigurnost';
                 }).next();
-
-                let safetyHTML = cheerio.load(carSafety.html());
-
+                
                 let safetyAttributes = [];
-                safetyHTML('div.uk-width-medium-1-3').each(function () {
-                    safetyAttributes.push(safetyHTML(this).text());
-                    // console.log(sigurnostHTML(this).text());//<div class="uk-width-medium-1-3 uk-width-1-2">ABS</div>
-                });
+                if(carSafety.html() !== null) {
+                    let safetyHTML = cheerio.load(carSafety.html());
 
+                    safetyHTML('div.uk-width-medium-1-3').each(function () {
+                        safetyAttributes.push(safetyHTML(this).text());
+                        // console.log(sigurnostHTML(this).text());//<div class="uk-width-medium-1-3 uk-width-1-2">ABS</div>
+                    });
+                }
+                
                 carObj['safetyAttributes'] = safetyAttributes;
 
                 let carGear = $('h2').filter(function() {
                     return $(this).text().trim() === 'Oprema';
                 }).next();
 
-                let gearHTML = cheerio.load(carGear.html());
-
                 let gearAttributes = [];
-                gearHTML('div.uk-width-medium-1-3').each(function (i, e) {
-                    gearAttributes.push(gearHTML(this).text());
-                    // console.log(sigurnostHTML(this).text());//<div class="uk-width-medium-1-3 uk-width-1-2">ABS</div>
-                });
+                if(carGear.html() !== null){
+                    let gearHTML = cheerio.load(carGear.html());
+
+                    gearHTML('div.uk-width-medium-1-3').each(function (i, e) {
+                        gearAttributes.push(gearHTML(this).text());
+                        // console.log(sigurnostHTML(this).text());//<div class="uk-width-medium-1-3 uk-width-1-2">ABS</div>
+                    });
+                }
 
                 carObj['gearAttributes'] = gearAttributes;
 
@@ -127,14 +129,12 @@ class PolovniScrap {
                 let newCar = new polovniModel(carObj)
                 newCar.save()
                 .then(doc => {
-                    console.log('Uspesno dodao!')
+                    console.log('Uspesno dodao ' + carObj['Marka'] + ' ' + carObj['Model'] + ', broj oglasa: ' + carObj['Broj oglasa: '] + '!')
                     })
                 .catch(err => {
                     console.error(err)
                     throw err
                 })
-
-                // fs.appendFileSync('data.txt', JSON.stringify(carObj));
             }
 
 
@@ -152,10 +152,9 @@ class PolovniScrap {
     }
 
     scrapeUrls(url) {
-
-        axios.get(url, {
-
-        }).then((response) => {
+        
+        axios.get(url)
+        .then((response) => {
 
             if(response.status === 200) {
                 let urls = [];
