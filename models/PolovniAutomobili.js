@@ -14,7 +14,7 @@ let polovniSchema = new mongoose.Schema({
     "Snaga motora": String,
     "Fiksna cena": String,
     "Zamena: ": String,
-    "Broj oglasa: ": String,
+    "Broj oglasa: ": Number,
     "Emisiona klasa motora": String,
     "Pogon": String,
     "Menjač": String,

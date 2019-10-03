@@ -66,6 +66,10 @@ class PolovniScrap {
                 });
 
                 for(let i=0; i<keys.length; i++){
+                    if(keys[i] === 'Broj oglasa') {
+                        //.*[:]\s*(\d+)
+                        vals[i] = parseInt(vals[i].replace(/\s*.*[:]\s*(\d+)\s*/g, '$1'));
+                    }
                     carObj[keys[i]] = vals[i]
                 }
 
