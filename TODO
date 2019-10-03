@@ -1,0 +1,24 @@
+TODO list :
+
+Regex fix :
+
+1. Cena
+2. Godiste
+3. Kilometraza
+4. Kubikaza
+5. Snaga
+6. Broj vrata
+7. Bro sedista
+8. Registorvan u date?
+
+Mongo:
+
+Proveri da li postoji vec u bazi
+Izdeli niz na cankove za klijenta
+Infinity scroll
+Kako da se sortiraju podaci iz vise razlicitih kolekcija na mongo strani
+
+
+BIG TASKS
+
+Dodaj jos 1 ili 2 sajta (scraper i baza)
