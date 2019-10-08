@@ -10,6 +10,7 @@ class PolovniScrap {
 
     constructor(url) {
         this.url = url;
+        this.idMap = new Set()
     }
 
     scrapeLoop() {
@@ -30,7 +31,7 @@ class PolovniScrap {
 
         })
         .then(() => {
-            setTimeout(this.scrapeLoop.bind(this), 30000)
+            // setTimeout(this.scrapeLoop.bind(this), 30000)
         })
         .catch( (error) => {
             console.log(error);
@@ -38,7 +39,6 @@ class PolovniScrap {
     }
 
     scrapeCar(url) {
-        
         axios.get(url)
         .then((response) => {
 
@@ -48,6 +48,7 @@ class PolovniScrap {
                 let $ = cheerio.load(html);
 
                 let carObj = {};
+                carObj['link'] = url
                 let pricesElems = $(".price-item");
                 carObj['cena'] = pricesElems.text().trim().slice(0, -2);
 
@@ -67,10 +68,13 @@ class PolovniScrap {
                 for(let i=0; i<keys.length; i++){
                     if(keys[i] === 'Broj oglasa: ') {
                         vals[i] = parseInt(vals[i].replace(/\s*.*[:]\s*(\d+)\s*/g, '$1'));
+                        console.log(this.idMap.has(vals[i]))
+                        this.idMap.add(vals[i])
                     }
                     carObj[keys[i]] = vals[i]
                 }
 
+                
 
                 let carMetadata = $('h2').filter(function() {
                     return $(this).text().trim() === 'Karakteristike vozila';
@@ -129,7 +133,7 @@ class PolovniScrap {
                 let newCar = new polovniModel(carObj)
                 newCar.save()
                 .then(doc => {
-                    console.log('Uspesno dodao ' + carObj['Marka'] + ' ' + carObj['Model'] + ', broj oglasa: ' + carObj['Broj oglasa: '] + '!')
+                    // console.log('Uspesno dodao ' + carObj['Marka'] + ' ' + carObj['Model'] + ', broj oglasa: ' + carObj['Broj oglasa: '] + '!')
                     })
                 .catch(err => {
                     console.error(err)
@@ -147,7 +151,7 @@ class PolovniScrap {
     }
 
     scrapeCars(urls) {
-        // console.log(urls);
+        console.log(urls);
         urls.forEach(url => this.scrapeCar(url));
     }
 
@@ -187,9 +191,10 @@ class PolovniScrap {
 
     iteratePages(numOfPages) {
         // const url = 'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=1&sort=basic&brand=audi&city_distance=0&showOldNew=all&without_price=1';
+        // console.log(numOfPages)
         for(let i=1;i<=5;i++) {
             let tmp_url = this.url.replace(/page=\d+/i, 'page=' + i.toString());
-            this.scrapeUrls(tmp_url);
+            this.scrapeUrls(tmp_url)
         }
     }
 

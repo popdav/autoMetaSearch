@@ -30,7 +30,8 @@ let polovniSchema = new mongoose.Schema({
     "Oštećenje": String,
     "Zemlja uvoza": String,
     "safetyAttributes": Array,
-    "gearAttributes": Array
+    "gearAttributes": Array,
+    "link" : String
 
 })
 
