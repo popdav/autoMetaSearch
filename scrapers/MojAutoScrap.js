@@ -2,8 +2,8 @@ const axios = require('axios');
 const cheerio=require('cheerio');
 
 const url  = 'https://www.mojauto.rs/rezultat/status/automobili/vozilo_je/polovan/poredjaj-po/oglas_najnoviji/po_stranici/20/prikazi_kao/lista/';
-
-class MojAuto {
+let mojModel = require('../models/MojAuto')
+class MojAutoScrap {
     constructor(url) {
         this.url = url;
     }
@@ -75,11 +75,10 @@ class MojAuto {
                             carObj['Gorivo'] = $(elem).text();
                             break;
                         case 15:
-                            carObj['Broj oglasa: '] = $(elem).text();
+                            // carObj['Broj oglasa: '] = $(elem).text();
 
 
                     }
-
                 });
 
                 let gearAttributes = [];
@@ -93,6 +92,15 @@ class MojAuto {
 
                 carObj['oprema'] = gearAttributes;
                 console.log(carObj);
+                let newCar = new mojModel(carObj)
+                newCar.save()
+                .then(doc => {
+                    // console.log('Uspesno dodao ' + carObj['Marka'] + ' ' + carObj['Model'] + ', broj oglasa: ' + carObj['Broj oglasa: '] + '!')
+                    })
+                .catch(err => {
+                    console.error(err)
+                    throw err
+                })
             }
         })
             .then(() => {
@@ -107,5 +115,4 @@ class MojAuto {
 
 }
 
-let test = new MojAuto('https://www.mojauto.rs/rezultat/status/automobili/vozilo_je/polovan/poredjaj-po/oglas_najnoviji/po_stranici/20/prikazi_kao/lista/');
-test.scrapeLoop();
+module.exports = MojAutoScrap;
