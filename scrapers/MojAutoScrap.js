@@ -20,7 +20,7 @@ class MojAutoScrap {
 
                     let links = $('div.addTitleWrap a').map((i, x) => $(x).attr('href')).toArray();
                     console.log(links);
-                    this.scrapeCar(links[0]);
+                    links.forEach(link => this.scrapeCar(link))
                 }
             })
             .then(() => {
@@ -33,7 +33,7 @@ class MojAutoScrap {
 
     scrapeCar(url) {
         url = 'https://www.mojauto.rs' + url;
-        console.log(url);
+        // console.log(url);
         axios.get(url, {
 
         }).then((response) => {
@@ -44,26 +44,31 @@ class MojAutoScrap {
                 let $ = cheerio.load(html);
 
                 let carObj = {};
-
+                carObj['logo'] = 'https://www.mojauto.rs/resources/images/logo-redesign.png'
+                carObj['link'] = url
+                
+                const picture = $('a#advertThumb_0').find('img').attr('src')
+              
+                carObj['slika'] = 'https://www.mojauto.rs' + picture
                 let mainInfo = $('.singleBreadcrumb').text().trim();
                 mainInfo = mainInfo.replace(/\s/g, "");
                 carObj['Marka'] = mainInfo.replace(/\w+[>]\w+[>](\w+)[>].*/, '$1');
                 carObj['Model'] = mainInfo.replace(/\w+[>]\w+[>]\w+[>](\w+)[>].*/, '$1');
 
-                carObj['Cena'] = $('.priceHigh span').text().replace(/(\d+[.]\d+).*/, '$1');
+                carObj['cena'] = $('.priceHigh span').text().replace(/(\d+[.]\d+).*/, '$1');
 
                 $('.sidePanel li').find('span').each(function(i, elem) {
 
                     switch (i) {
 
                         case 0 :
-                            carObj['Godiste'] = $(elem).text();
+                            carObj['Godište'] = $(elem).text();
                             break;
                         case 1:
-                            carObj['Kubikaza'] = $(elem).text();
+                            carObj['Kubikaža'] = $(elem).text();
                             break;
                         case 2:
-                            carObj['Kilometraza'] = $(elem).text();
+                            carObj['Kilometraža'] = $(elem).text();
                             break;
                         case 3:
                             carObj['Snaga motora'] = $(elem).text();
@@ -91,11 +96,11 @@ class MojAutoScrap {
                 });
 
                 carObj['oprema'] = gearAttributes;
-                console.log(carObj);
+                
                 let newCar = new mojModel(carObj)
                 newCar.save()
                 .then(doc => {
-                    // console.log('Uspesno dodao ' + carObj['Marka'] + ' ' + carObj['Model'] + ', broj oglasa: ' + carObj['Broj oglasa: '] + '!')
+                    console.log('Uspesno dodao ' + carObj['Marka'] + ' ' + carObj['Model'] + ', broj oglasa: ' + carObj['Broj oglasa: '] + '!')
                     })
                 .catch(err => {
                     console.error(err)

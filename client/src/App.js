@@ -173,11 +173,11 @@ class App extends Component {
           return (
             <div className="" key={i}>
               <div onClick={()=> window.open(elem["link"], "_blank")} className="media-car media border border-info rounded">
-                <img className="mr-3" src={elem['slika']} alt="Auto" />
+                <img className="media-object img-thumbnail" src={elem['slika']} alt="Auto" />
                 <div className="media-body ">
                   <h5 className="mt-0">{elem['Marka'] + ' ' + elem['Model'] }</h5>
                   <p>
-                    <b>{"Fiksna cena: " }</b> { elem['Fiksna cena']} 
+                     
                     <b>{"   Godište: " }</b> { elem['Godište'] }
                     <br/>
                     <b>{"Gorivo: " }</b> { elem['Gorivo'] }
@@ -187,9 +187,7 @@ class App extends Component {
                     <b>{"   Kubikaža: " }</b> { elem['Kubikaža'] }
                     <br/>
                     <b>{"Snaga motora: " }</b> { elem['Snaga motora'] }
-                    <b>{"   Vozilo: " }</b> { elem['Vozilo:'] }
                     <br/>
-                    <b>{"Zamena: " }</b> { elem["Zamena: "] }
                     <b>{"   cena: " }</b> { elem['cena']}
                     <br/>
                   </p>

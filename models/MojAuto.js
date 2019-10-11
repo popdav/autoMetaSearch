@@ -31,8 +31,8 @@ let mojSchema = new mongoose.Schema({
     "Zemlja uvoza": String,
     "safetyAttributes": Array,
     "gearAttributes": Array,
-    "link" : String
-
+    "link" : String,
+    "logo" : String
 })
 
 

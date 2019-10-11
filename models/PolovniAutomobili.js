@@ -33,7 +33,6 @@ let polovniSchema = new mongoose.Schema({
     "gearAttributes": Array,
     "link" : String,
     "logo" : String
-
 })
 
 polovniSchema.statics.getCars = function() {

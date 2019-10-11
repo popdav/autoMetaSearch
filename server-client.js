@@ -23,12 +23,26 @@ const mojModel = require('./models/MojAuto')
 app.post('/findPolovni', (req, res) => {
     let body = req.body.findQuery
     console.log(req.body)
+    let data = []
     polovniModel
     .find(body)
     .skip(100 * (req.body.chunkNumber-1))
     .limit(100)
     .then(doc => {
-        res.send(doc)
+        console.log(doc)
+        data = [...data, ...doc]
+    })
+    .then(() => {
+        mojModel
+        .find(body)
+        .skip(100 * (req.body.chunkNumber-1))
+        .limit(100)
+        .then(doc => {
+            console.log(doc)
+            data = [...data, ...doc]
+            res.send(data)
+        })
+
     })
     .catch(err => {
         console.error(err)
