@@ -49,6 +49,7 @@ class PolovniScrap {
 
                 let carObj = {};
                 carObj['link'] = url
+                carObj['logo'] = 'https://www.polovniautomobili.com/bundles/site/images/polovniautomobili-logo.svg'
                 let pricesElems = $(".price-item");
                 carObj['cena'] = pricesElems.text().trim().slice(0, -2);
 

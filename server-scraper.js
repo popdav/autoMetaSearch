@@ -6,7 +6,7 @@ const Mongo = require('mongodb')
 
 const app = express()
 
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 5001
 
 app.use(morgan('dev'))
 app.use(bodyParser.json())
@@ -23,53 +23,12 @@ const urlPolovni = 'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=
 //'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=1&sort=basic&brand=audi&city_distance=0&showOldNew=all&without_price=1'
 //'https://www.polovniautomobili.com/auto-oglasi/pretraga?brand=bmw&price_to=&year_from=&year_to=&showOldNew=all&submit_1=&without_price=1'
 let instancaPolovniScrap = new PolovniScrap(urlPolovni)
-// instancaPolovniScrap.scrapeLoop()
+instancaPolovniScrap.scrapeLoop()
 
 const urlMoj = 'https://www.mojauto.rs/rezultat/status/automobili/vozilo_je/polovan/poredjaj-po/oglas_najnoviji/po_stranici/20/prikazi_kao/lista/'
 const MojScrap = require('./scrapers/MojAutoScrap')
 let instanceMojScrap = new MojScrap(urlMoj)
-instanceMojScrap.scrapeLoop()
-
-
-app.post('/findPolovni', (req, res) => {
-    let body = req.body.findQuery
-    console.log(req.body)
-    polovniModel
-    .find(body)
-    .skip(100 * (req.body.chunkNumber-1))
-    .limit(100)
-    .then(doc => {
-        res.send(doc)
-    })
-    .catch(err => {
-        console.error(err)
-        throw err
-    })
-})
-
-app.post('/markUnique', (req, res) => {
-    polovniModel
-    .find()
-    .distinct('Marka', (error, marks) => {
-        res.send(marks)
-    });
-})
-
-app.post('/modelUniqueAudi', (req, res) => {
-    polovniModel
-    .find({Marka : 'Audi'})
-    .distinct('Model', (error, models) => {
-        res.send(models)
-    });
-})
-
-app.post('/modelUniqueBMW', (req, res) => {
-    polovniModel
-    .find({Marka : 'BMW'})
-    .distinct('Model', (error, models) => {
-        res.send(models)
-    });
-})
+// instanceMojScrap.scrapeLoop()
 
 
 const server = app.listen(port, () => console.log(`Listening on port ${port}`))

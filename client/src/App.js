@@ -193,7 +193,7 @@ class App extends Component {
                     <b>{"   cena: " }</b> { elem['cena']}
                     <br/>
                   </p>
-                  <img className="img-thumbnail" src="https://www.polovniautomobili.com/bundles/site/images/polovniautomobili-logo.svg" alt="Auto" />
+                  <img className="img-thumbnail" src={elem['logo']} alt="Auto" />
                 </div>
                 
               </div>
