@@ -57,7 +57,8 @@ class MojAutoScrap {
         // const url = 'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=1&sort=basic&brand=audi&city_distance=0&showOldNew=all&without_price=1';
         // console.log(numOfPages)
         for(let i=1;i<=5;i++) {
-            let tmp_url = this.url + '/stranica/' + i;
+            let tmp_url = this.url + 'stranica/' + i;
+            console.log(tmp_url)
             this.scrapeUrls(tmp_url)
         }
     }
@@ -161,5 +162,5 @@ class MojAutoScrap {
 
 module.exports = MojAutoScrap;
 
-let test = new MojAutoScrap('https://www.mojauto.rs/rezultat/status/automobili/vozilo_je/polovan/poredjaj-po/oglas_najnoviji/po_stranici/20/prikazi_kao/lista/');
-test.scrapeLoop();
+// let test = new MojAutoScrap('https://www.mojauto.rs/rezultat/status/automobili/vozilo_je/polovan/poredjaj-po/oglas_najnoviji/po_stranici/20/prikazi_kao/lista/');
+// test.scrapeLoop();
