@@ -81,7 +81,7 @@ class MojAutoScrap {
     iteratePages(numOfPages) {
         // const url = 'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=1&sort=basic&brand=audi&city_distance=0&showOldNew=all&without_price=1';
         // console.log(numOfPages)
-        for(let i=1;i<=5;i++) {
+        for(let i=1;i<=10;i++) {
             let tmp_url = this.url + 'stranica/' + i;
             this.scrapeUrls(tmp_url)
         }

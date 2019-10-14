@@ -34,6 +34,6 @@ let mojSchema = new mongoose.Schema({
     "link" : String,
     "logo" : String
 })
-
+mojSchema.index({link: 1})
 
 module.exports = mongoose.model('MojAuto', mojSchema)

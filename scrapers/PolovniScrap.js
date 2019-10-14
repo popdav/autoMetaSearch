@@ -178,7 +178,7 @@ class PolovniScrap {
                                     new Promise((resolve, reject) => {
                                         polovniModel.countDocuments({link: jsonObj['url'].trim()}, (err, count) => {
                                             if(err) throw err
-                                            
+
                                             console.log('Broj: ' + count + ' link ' + jsonObj['url'].trim())
                                             if(count == 0)
                                                 urls.push(jsonObj['url'].trim());
@@ -209,7 +209,7 @@ class PolovniScrap {
     iteratePages(numOfPages) {
         // const url = 'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=1&sort=basic&brand=audi&city_distance=0&showOldNew=all&without_price=1';
         // console.log(numOfPages)
-        for(let i=1;i<=5;i++) {
+        for(let i=1;i<=8;i++) {
             let tmp_url = this.url.replace(/page=\d+/i, 'page=' + i.toString());
             this.scrapeUrls(tmp_url)
         }

@@ -31,10 +31,10 @@ let polovniSchema = new mongoose.Schema({
     "Zemlja uvoza": String,
     "safetyAttributes": Array,
     "gearAttributes": Array,
-    "link" : String,
+    "link" : {type: [String], index: true},
     "logo" : String
 })
-
+polovniSchema.index({link: 1})
 polovniSchema.statics.getCars = function() {
     return new Promise((res, rej) => {
         this.model('PolovniAutomobili').find((err, docs) => {
