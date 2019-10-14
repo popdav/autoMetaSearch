@@ -17,10 +17,8 @@ class MojAutoScrap {
                     const html = response.data;
                     let $ = cheerio.load(html);
 
-                    let links = $('div.addTitleWrap a').map((i, x) => $(x).attr('href')).toArray();
-                    // console.log(links);
-                    this.scrapeCar(links[0])
-                    // links.forEach(link => this.scrapeCar(link))
+                    let numOfPages = this.numberOfPages($);
+                    this.iteratePages(numOfPages);
                 }
             })
             .then(() => {
@@ -29,6 +27,45 @@ class MojAutoScrap {
             .catch( (error) => {
                 console.log(error);
             })
+    }
+
+    scrapeCars(urls) {
+        urls.forEach(url => this.scrapeCar(url));
+    }
+
+    scrapeUrls(url) {
+
+        axios.get(url)
+            .then((response) => {
+
+                if(response.status === 200) {
+                    const html = response.data;
+                    let $ = cheerio.load(html);
+
+                    let urls = $('div.addTitleWrap a').map((i, x) => $(x).attr('href')).toArray();
+                    this.scrapeCars(urls);
+                }
+
+            }).catch((error) => {
+            console.log(error);
+        }).then(function () {
+
+        });
+    }
+
+    iteratePages(numOfPages) {
+        // const url = 'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=1&sort=basic&brand=audi&city_distance=0&showOldNew=all&without_price=1';
+        // console.log(numOfPages)
+        for(let i=1;i<=5;i++) {
+            let tmp_url = this.url + '/stranica/' + i;
+            this.scrapeUrls(tmp_url)
+        }
+    }
+
+    numberOfPages($) {
+        const adds = $('.resultSortTop').find('span').text();
+        const numOfAdds = parseFloat(adds.replace(/Prikazano 20 od (\d+[.]\d+) oglasa.*/g, '$1'))*1000;
+        return Math.ceil(numOfAdds/20);
     }
 
     scrapeCar(url) {
@@ -56,35 +93,6 @@ class MojAutoScrap {
                 carObj['Model'] = mainInfo.replace(/\w+[>]\w+[>]\w+[>](\w+)[>].*/, '$1');
 
                 carObj['cena'] = $('.priceHigh span').text().replace(/(\d+[.]\d+).*/, '$1');
-
-                // $('.sidePanel li').find('span').each(function(i, elem) {
-                //
-                //     switch (i) {
-                //
-                //         case 0 :
-                //             carObj['Godište'] = $(elem).text();
-                //             break;
-                //         case 1:
-                //             carObj['Kubikaža'] = $(elem).text();
-                //             break;
-                //         case 2:
-                //             carObj['Kilometraža'] = $(elem).text();
-                //             break;
-                //         case 3:
-                //             carObj['Snaga motora'] = $(elem).text();
-                //             break;
-                //         case 4:
-                //             carObj['Karoserija'] = $(elem).text();
-                //             break;
-                //         case 5:
-                //             carObj['Gorivo'] = $(elem).text();
-                //             break;
-                //         case 15:
-                //             // carObj['Broj oglasa: '] = $(elem).text();
-                //
-                //
-                //     }
-                // });
 
                 let values = [];
                 let fields = [];
@@ -126,7 +134,7 @@ class MojAutoScrap {
 
                 carObj['oprema'] = gearAttributes;
 
-                console.log(carObj);
+                // console.log(carObj);
                 
                 let newCar = new mojModel(carObj);
                 newCar.save()
