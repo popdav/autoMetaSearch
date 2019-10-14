@@ -30,7 +30,7 @@ app.post('/merge', (req, res) => {
     let first_out = 0
     let second_out = 0
 
-    let order = 0
+    let order = Math.random() > 0.5 ? 1 : 0
 
     while(first_out < arr1.length || second_out < arr2.length) {
 
@@ -67,32 +67,86 @@ app.post('/merge', (req, res) => {
 
 app.post('/findPolovni', (req, res) => {
     let body = req.body.findQuery
-    console.log(req.body)
-    let data = []
-    polovniModel
-    .find(body)
-    .skip(100 * (req.body.chunkNumber-1))
-    .limit(100)
-    .then(doc => {
-        console.log(doc)
-        data = [...data, ...doc]
+    // console.log(req.body)
+    let arr1 = []
+    let arr2 = []
+    let promiseArr = []
+    promiseArr.push(new Promise((resolve, reject) => {
+        polovniModel
+        .find(body)
+        .skip(20 * (req.body.chunkNumber-1))
+        .limit(20)
+        .then(doc => {
+            arr1 = doc
+            resolve()
+        })
+        .catch(err => {
+            console.error(err)
+            throw err
+        })
     })
-    .then(() => {
+    )
+    
+    promiseArr.push(new Promise((resolve, reject) => {
         mojModel
         .find(body)
-        .skip(100 * (req.body.chunkNumber-1))
-        .limit(100)
+        .skip(20 * (req.body.chunkNumber-1))
+        .limit(20)
         .then(doc => {
-            console.log(doc)
-            data = [...data, ...doc]
-            res.send(data)
+            arr2 = doc
+            resolve()
         })
+        .catch(err => {
+            console.error(err)
+            throw err
+        })
+    })
+    )
+
+    Promise.all(promiseArr)
+    .then(() => {
+        let mergedArr = []
+
+        let first_out = 0
+        let second_out = 0
+    
+        let order = Math.random() > 0.5 ? 1 : 0
+    
+        while(first_out < arr1.length || second_out < arr2.length) {
+    
+            let rand = Math.floor(Math.random() * 3) + 1;
+    
+            if(order === 0) {
+                if(first_out + rand < arr1.length) {
+                    mergedArr = mergedArr.concat(arr1.slice(first_out, first_out + rand))
+                    first_out = first_out + rand
+                }
+                else {
+                    mergedArr = mergedArr.concat(arr1.slice(first_out, arr1.length))
+                    mergedArr = mergedArr.concat(arr2.slice(second_out, arr2.length))
+                    break
+                }
+            }
+            else {
+                if(second_out + rand < arr2.length) {
+                    mergedArr = mergedArr.concat(arr2.slice(second_out, second_out + rand))
+                    second_out = second_out + rand
+                }
+                else {
+                    mergedArr = mergedArr.concat(arr2.slice(second_out, arr2.length))
+                    mergedArr = mergedArr.concat(arr1.slice(first_out, arr1.length))
+                    break
+                }
+            }
+    
+            order = (order + 1) % 2
+        }
+    
+        res.send(mergedArr)
 
     })
-    .catch(err => {
-        console.error(err)
-        throw err
-    })
+
+    
 })
 
 app.post('/markUnique', (req, res) => {
