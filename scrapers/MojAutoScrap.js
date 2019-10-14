@@ -42,8 +42,33 @@ class MojAutoScrap {
                     const html = response.data;
                     let $ = cheerio.load(html);
 
-                    let urls = $('div.addTitleWrap a').map((i, x) => $(x).attr('href')).toArray();
-                    this.scrapeCars(urls);
+                    let urls = $('div.addTitleWrap a').map((i, x) => {
+                        let linkScrap = /**/ $(x).attr('href').trim()
+                        return linkScrap
+                    })
+                    .toArray();
+                    // console.log(urls)
+                    let promiseUrls = []
+                    for(let i=0; i<urls.length; i++){
+                        let linkFind = 'https://www.mojauto.rs' + urls[i]
+                        promiseUrls.push( 
+                            new Promise((resolve, reject) => {
+                                mojModel.countDocuments({link:  linkFind}, (err, count) => {
+                                    if(err) throw err
+                                    
+                                    console.log('Broj: ' + count + ' link: ' + linkFind)
+                                    if(count != 0)
+                                        urls.splice(i)
+                                    resolve()
+                                })
+                            })
+                        )
+                    }
+                    Promise.all(promiseUrls)
+                    .then(() => {
+                        this.scrapeCars(urls);
+                    })
+                    
                 }
 
             }).catch((error) => {
@@ -58,7 +83,6 @@ class MojAutoScrap {
         // console.log(numOfPages)
         for(let i=1;i<=5;i++) {
             let tmp_url = this.url + 'stranica/' + i;
-            console.log(tmp_url)
             this.scrapeUrls(tmp_url)
         }
     }
@@ -128,11 +152,12 @@ class MojAutoScrap {
                 let carGear = $('h1').filter(function () {
                     return $(this).text().trim() === 'Oprema';
                 }).next();
-                let gearHtml = cheerio.load(carGear.html());
-                gearHtml('li').each(function (i, elem) {
-                    gearAttributes.push($(elem).text().trim());
-                });
-
+                if(carGear.html() !== null){
+                    let gearHtml = cheerio.load(carGear.html());
+                    gearHtml('li').each(function (i, elem) {
+                        gearAttributes.push($(elem).text().trim());
+                    });
+                }
                 carObj['oprema'] = gearAttributes;
 
                 // console.log(carObj);
@@ -140,7 +165,7 @@ class MojAutoScrap {
                 let newCar = new mojModel(carObj);
                 newCar.save()
                 .then(doc => {
-                    console.log('Uspesno dodao ' + carObj['Marka'] + ' ' + carObj['Model'] + ', broj oglasa: ' + carObj['Broj oglasa: '] + '!')
+                    console.log('Uspesno dodao ' + carObj['Marka'] + ' ' + carObj['Model'] + '!')
                     })
                 .catch(err => {
                     console.error(err)

@@ -10,7 +10,7 @@ class PolovniScrap {
 
     constructor(url) {
         this.url = url;
-        this.idMap = new Set()
+        // this.idMap = new Set()
     }
 
     scrapeLoop() {
@@ -69,8 +69,8 @@ class PolovniScrap {
                 for(let i=0; i<keys.length; i++){
                     if(keys[i] === 'Broj oglasa: ') {
                         vals[i] = parseInt(vals[i].replace(/\s*.*[:]\s*(\d+)\s*/g, '$1'));
-                        console.log(this.idMap.has(vals[i]))
-                        this.idMap.add(vals[i])
+                        // console.log(this.idMap.has(vals[i]))
+                        // this.idMap.add(vals[i])
                     }
                     carObj[keys[i]] = vals[i]
                 }
@@ -134,7 +134,7 @@ class PolovniScrap {
                 let newCar = new polovniModel(carObj)
                 newCar.save()
                 .then(doc => {
-                    // console.log('Uspesno dodao ' + carObj['Marka'] + ' ' + carObj['Model'] + ', broj oglasa: ' + carObj['Broj oglasa: '] + '!')
+                    console.log('Uspesno dodao ' + carObj['Marka'] + ' ' + carObj['Model'] + ', broj oglasa: ' + carObj['Broj oglasa: '] + '!')
                     })
                 .catch(err => {
                     console.error(err)
@@ -152,12 +152,12 @@ class PolovniScrap {
     }
 
     scrapeCars(urls) {
-        console.log(urls);
+        // console.log(urls);
         urls.forEach(url => this.scrapeCar(url));
     }
 
     scrapeUrls(url) {
-        
+        let promiseUrl = []
         axios.get(url)
         .then((response) => {
 
@@ -174,13 +174,29 @@ class PolovniScrap {
                             data = data.replace(']', '');
                             if(data.includes("brand")) {
                                 let jsonObj =  JSON.parse(data);
-                                urls.push(jsonObj['url'].trim());
+                                promiseUrl.push(
+                                    new Promise((resolve, reject) => {
+                                        polovniModel.countDocuments({link: jsonObj['url'].trim()}, (err, count) => {
+                                            if(err) throw err
+                                            
+                                            console.log('Broj: ' + count + ' link ' + jsonObj['url'].trim())
+                                            if(count == 0)
+                                                urls.push(jsonObj['url'].trim());
+                                            resolve()
+                                        });
+                                    })
+                                )
+                                
+                                
                             }
                         }
                     }
                 }
-
-                this.scrapeCars(urls);
+                Promise.all(promiseUrl)
+                .then(() => {
+                    this.scrapeCars(urls);
+                })
+                
             }
 
         }).catch((error) => {
