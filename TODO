@@ -1,7 +1,6 @@
 TODO list :
 
 Regex fix :
-
 1. Cena
 2. Godiste
 3. Kilometraza
@@ -11,6 +10,7 @@ Regex fix :
 7. Bro sedista
 8. Registorvan u date?
 
+<<<<<<< HEAD
 !!!!!!!!!!!!!!!!!!!!!!
 mojauto dodaci:
 9. dodati broj telefona
@@ -20,16 +20,18 @@ mojauto dodaci:
 
 
 Mongo:
+=======
+Dodatni scrap :
+    broj telefona
+>>>>>>> bfa5e7fceb7dbd54ddc0b3cc5c200dc0006c69a0
 
-Proveri da li postoji vec u bazi
-Izdeli niz na cankove za klijenta
-Infinity scroll
-Kako da se sortiraju podaci iz vise razlicitih kolekcija na mongo strani
+Main points :
+
+    SMS service,
+    Smart search
+    Deploy - za vikend
 
 
-BIG TASKS
-
-Dodaj jos 1 ili 2 sajta (scraper i baza)
 
 sajtovi za dodati:
     https://www.goglasi.com/vozila-i-delovi/search?categoryId=38
