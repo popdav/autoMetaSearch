@@ -67,7 +67,7 @@ app.post('/merge', (req, res) => {
 
 app.post('/findPolovni', (req, res) => {
     let body = req.body.findQuery
-    // console.log(req.body)
+    console.log(req.body)
     let arr1 = []
     let arr2 = []
     let promiseArr = []
@@ -150,28 +150,80 @@ app.post('/findPolovni', (req, res) => {
 })
 
 app.post('/markUnique', (req, res) => {
-    polovniModel
-    .find()
-    .distinct('Marka', (error, marks) => {
-        res.send(marks)
-    });
+    let promiseArr = []
+    let data = []
+    promiseArr.push(
+        new Promise((resolve, reject) => {
+            polovniModel
+            .find()
+            .distinct('Marka', (error, marks) => {
+                if(error) throw error
+
+                data = [...data, ...marks]
+                resolve()
+            })
+        })
+    )
+
+    promiseArr.push(
+        new Promise((resolve, reject) => {
+            mojModel
+            .find()
+            .distinct('Marka', (error, marks) => {
+                if(error) throw error
+
+                data = [...data, ...marks]
+                resolve()
+            })
+        })
+    )
+    
+    Promise.all(promiseArr)
+    .then(() => {
+        data = [...new Set(data)]
+        data.sort()
+        res.send(data)
+    })
+   
 })
 
-app.post('/modelUniqueAudi', (req, res) => {
-    polovniModel
-    .find({Marka : 'Audi'})
-    .distinct('Model', (error, models) => {
-        res.send(models)
-    });
+app.post('/modelUnique', (req, res) => {
+    let promiseArr = []
+    let data = []
+    promiseArr.push(
+        new Promise((resolve, reject) => {
+            polovniModel
+            .find({Marka : req.body.model})
+            .distinct('Model', (error, models) => {
+                if(error) throw error
+
+                data = [...data, ...models]
+                resolve()
+            });
+        })
+    )
+
+    promiseArr.push(
+        new Promise((resolve, reject) => {
+            mojModel
+            .find({Marka : req.body.model})
+            .distinct('Model', (error, models) => {
+                if(error) throw error
+
+                data = [...data, ...models]
+                resolve()
+            });
+        })
+    )
+    
+    Promise.all(promiseArr)
+    .then(() => {
+        data = [...new Set(data)]
+        data.sort()
+        res.send(data)
+    })
 })
 
-app.post('/modelUniqueBMW', (req, res) => {
-    polovniModel
-    .find({Marka : 'BMW'})
-    .distinct('Model', (error, models) => {
-        res.send(models)
-    });
-})
 
 
 const server = app.listen(port, () => console.log(`Listening on port ${port}`))

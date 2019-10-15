@@ -117,6 +117,12 @@ class MojAutoScrap {
                 carObj['Marka'] = mainInfo.replace(/\w+[>]\w+[>](\w+)[>].*/, '$1');
                 carObj['Model'] = mainInfo.replace(/\w+[>]\w+[>]\w+[>](\w+)[>].*/, '$1');
 
+                carObj['Marka'] = carObj['Marka'] == 'AlfaRomeo' ? 'Alfa Romeo' : carObj['Marka']
+                carObj['Marka'] = carObj['Marka'] == 'Mercedes' ? 'Mercedes Benz' : carObj['Marka']
+                carObj['Marka'] = carObj['Marka'] == 'VW' ? 'Volkswagen' : carObj['Marka']
+                
+                if(carObj['Marka'] == 'AlfaRomeo') console.log(carObj)
+
                 carObj['cena'] = $('.priceHigh span').text().replace(/(\d+[.]\d+).*/, '$1');
 
                 let values = [];
@@ -143,9 +149,22 @@ class MojAutoScrap {
                 });
 
                 for (let i=0; i<fields.length; i++) {
-                    carObj[fields[i]] = values[i];
+                    switch(fields[i]){
+                        case 'Kategorija':
+                            carObj['Karoserija'] = values[i];
+                            break;
+                        case 'Snaga':
+                                carObj['Snaga motora'] = values[i];
+                                break;
+                        case 'Prešao kilometara':
+                                carObj['Kilometraža'] = values[i];
+                                break;
+                        default:
+                            carObj[fields[i]] = values[i];
+                    }
+                    
                 }
-
+                // console.log(carObj)
                 // console.log(generalInfo.html());
 
                 let gearAttributes = [];

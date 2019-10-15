@@ -71,8 +71,13 @@ class App extends Component {
   }
 
   handleScroll = (e) => {
-    const bottom = e.target.scrollingElement.scrollHeight - e.target.scrollingElement.scrollTop === e.target.scrollingElement.clientHeight
+    e.preventDefault()
+    const bottom = e.target.scrollingElement.scrollHeight - e.target.scrollingElement.scrollTop  <= e.target.scrollingElement.clientHeight
+    console.log(e)
+    console.log(e.target.scrollingElement.scrollHeight)
     console.log(e.target.scrollingElement.scrollTop)
+    console.log(e.target.scrollingElement.scrollHeight - e.target.scrollingElement.scrollTop)
+    console.log(e.target.scrollingElement.clientHeight)
     if (bottom) {
       this.loadMore()
     }
@@ -82,8 +87,8 @@ class App extends Component {
     e.persist()
     console.log(e.target.value)
     if(e.target.value !== 'None'){
-      let callString = '/modelUnique' + e.target.value
-      axios.post(callString)
+      let callString = '/modelUnique'// + e.target.value
+      axios.post(callString, {model: e.target.value})
         .then((res) => {
           this.setState({ 
             models: res.data,
@@ -170,6 +175,8 @@ class App extends Component {
         <br/>
 
         {this.state.cars.map((elem, i) => {
+          let cena = 'Dogovor'
+          if(elem['cena'] != '') cena = elem['cena']
           return (
             <div className="" key={i}>
               <div onClick={()=> window.open(elem["link"], "_blank")} className="media-car media border border-info rounded">
@@ -188,7 +195,7 @@ class App extends Component {
                     <br/>
                     <b>{"Snaga motora: " }</b> { elem['Snaga motora'] }
                     <br/>
-                    <b>{"   cena: " }</b> { elem['cena']}
+                    <b>{"   cena: " }</b> { cena}
                     <br/>
                   </p>
                   <img className="img-thumbnail" src={elem['logo']} alt="Auto" />

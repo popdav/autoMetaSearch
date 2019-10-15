@@ -11,6 +11,14 @@ Regex fix :
 7. Bro sedista
 8. Registorvan u date?
 
+!!!!!!!!!!!!!!!!!!!!!!
+mojauto dodaci:
+9. dodati broj telefona
+10. provera za skode na mojauto, pokupi ceo deo (Mojauto>Automobili>Škoda>Octavia>ŠkodaOctaviaA72.0TDI)
+11. godiste i gorivo iz mojauto
+12. pogledati regex za model i marku za mojauto jer kada je naziv iz vise reci spoji ih u jednu, a treba mi lepo zbog pretrage
+
+
 Mongo:
 
 Proveri da li postoji vec u bazi

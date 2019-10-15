@@ -19,9 +19,10 @@ let DB = require('./database')
 let polovniModel = require('./models/PolovniAutomobili')
 
 const PolovniScrap = require('./scrapers/PolovniScrap')
-const urlPolovni = 'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=1&sort=basic&brand=audi&city_distance=0&showOldNew=all&without_price=1'
+const urlPolovni = 'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=1&sort=basic&city_distance=0&showOldNew=all&without_price=1'
 //'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=1&sort=basic&brand=audi&city_distance=0&showOldNew=all&without_price=1'
 //'https://www.polovniautomobili.com/auto-oglasi/pretraga?brand=bmw&price_to=&year_from=&year_to=&showOldNew=all&submit_1=&without_price=1'
+//https://www.polovniautomobili.com/auto-oglasi/pretraga?page=3&sort=basic&city_distance=0&showOldNew=all&without_price=1
 let instancaPolovniScrap = new PolovniScrap(urlPolovni)
 instancaPolovniScrap.scrapeLoop()
 
