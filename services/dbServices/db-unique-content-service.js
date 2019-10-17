@@ -11,18 +11,15 @@ class DbUniqueContent {
 
     async makeUniqe() {
         let result = [];
-        try {
-            for(let dbModel of this.models) {
-                let tmpResult = await dbModel
-                    .find()
-                    .distinct('Marka');
-                result = result.concat(tmpResult);
-            }
-        }
-        catch (err) {
-            console.log(err);
-            throw err;
-        }
+
+        await Promise.all(this.models.map(async (dbModel) => {
+            const tmpRes = await dbModel
+                .find()
+                .distinct('Marka');
+            // console.log(tmpRes)
+            result = result.concat(tmpRes);
+        }));
+
         let resultSet = new Set(result)
         return [...resultSet];
     }
@@ -31,19 +28,13 @@ class DbUniqueContent {
     async modelUnique(model) {
         let result = [];
 
-        try {
-            for(let dbModel of this.models) {
-                let tmpResult = await dbModel
-                    .find({'Marka': model})
-                    .distinct('Model');
-
-                result = result.concat(tmpResult);
-            }
-        }
-        catch (err) {
-            console.log(err);
-            throw err;
-        }
+        await Promise.all(this.models.map(async (dbModel) => {
+            const tmpRes = await dbModel
+                .find({'Marka': model})
+                .distinct('Model');
+            // console.log(tmpRes)
+            result = result.concat(tmpRes);
+        }));
 
         let resultSet = new Set(result)
         return [...resultSet];

@@ -8,7 +8,7 @@ const DbUniqueContent = require('./services/dbServices/db-unique-content-service
 
 const app = express()
 
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 5001
 
 app.use(morgan('dev'))
 app.use(bodyParser.json())
