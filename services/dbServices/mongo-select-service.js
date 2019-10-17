@@ -8,6 +8,7 @@ class MongoService {
     constructor() {
         this.smartSearchMap = new Map();
         this.smartSearchMap.set('sportski', {'Marka' : 'Audi', 'Model' : 'A4'});
+        this.smartSearchMap.set('biznis', {'Marka' : 'Audi', 'Model' : 'A6'});
     }
 
     mergeArrays(arr1, arr2) {
@@ -57,12 +58,15 @@ class MongoService {
         let queryObjects = []
 
         tags.forEach((tag) => {
-
             queryObjects.push(this.smartSearchMap.get(tag));
-
         });
 
-        //Sad iteriramo kroz niz objekata i radimo select
+        for(let queryObject of queryObjects) {
+            let tmpRes = await this.select(queryObjects, chunkNumber);
+            result = result.concat(tmpRes);
+        }
+
+        return result;
 
     }
 

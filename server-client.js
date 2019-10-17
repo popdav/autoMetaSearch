@@ -26,10 +26,12 @@ const dbUniqueContent = new DbUniqueContent();
 
 app.post('/smartSearch', async (req, res) => {
 
-    const body = req.body.tags;
-    console.log(body);
+    //"sportski,biznis"
 
-    let result = await mongoService.smartSearch(object, req.body.chunkNumber);
+    const tags = req.body.tags.split(',');
+    console.log(tags);
+
+    let result = await mongoService.smartSearch(tags, req.body.chunkNumber);
     res.send(result);
 
 });
