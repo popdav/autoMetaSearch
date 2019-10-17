@@ -7,8 +7,8 @@ class MongoService {
 
     constructor() {
         this.smartSearchMap = new Map();
-        this.smartSearchMap.set('sportski', {'Marka' : 'Audi', 'Model' : 'A4'});
-        this.smartSearchMap.set('biznis', {'Marka' : 'Audi', 'Model' : 'A6'});
+        this.smartSearchMap.set('sportski', [{'Marka' : 'Audi', 'Model' : 'A4'}, {'Marka' : 'Fiat', 'Model' : 'Punto'}]);
+        this.smartSearchMap.set('biznis', [{'Marka' : 'Audi', 'Model' : 'A6'}, {'Marka' : 'Fiat', 'Model' : 'Bravo'}]);
     }
 
     mergeArrays(arr1, arr2) {
@@ -54,20 +54,23 @@ class MongoService {
 
     async smartSearch(tags, chunkNumber) {
 
-        let result = []
-        let queryObjects = []
+        let result = [];
+        let queryObjects = [];
+        let queryData = [];
 
         tags.forEach((tag) => {
-            queryObjects.push(this.smartSearchMap.get(tag));
+            queryData.push(this.smartSearchMap.get(tag));
         });
+
+        for(let data of queryData) {
+            queryObjects = queryObjects.concat(data);
+        }
 
         for(let queryObject of queryObjects) {
             let tmpRes = await this.select(queryObjects, chunkNumber);
             result = result.concat(tmpRes);
         }
-
         return result;
-
     }
 
     async select(object, chunkNumber) {
