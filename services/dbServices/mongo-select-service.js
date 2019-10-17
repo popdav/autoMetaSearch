@@ -108,3 +108,5 @@ class MongoService {
         return result;
     }
 }
+
+module.exports = MongoService;
