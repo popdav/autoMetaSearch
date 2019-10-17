@@ -140,11 +140,16 @@ class App extends Component {
 
   clickSearch = (e) => {
     e.preventDefault()
+    let godisteBody = {$lte:this.state.toYear === 'None' ? undefined : parseInt(this.state.toYear), $gte:this.state.fromYear === 'None' ? undefined : parseInt(this.state.fromYear)}
+    
+    if(godisteBody['$lte'] === undefined && godisteBody['$gte'] === undefined)
+      godisteBody = undefined
+
     let body = {
       findQuery:{
         Marka: this.state.selectedMark === 'None' ? undefined : this.state.selectedMark,
         Model: this.state.selectedModel === 'None' ? undefined : this.state.selectedModel,
-        Godište: {$lte:this.state.toYear === 'None' ? undefined : parseInt(this.state.toYear), $gte:this.state.fromYear === 'None' ? undefined : parseInt(this.state.fromYear)}
+        Godište: godisteBody
       },
       chunkNumber: 1
     }
