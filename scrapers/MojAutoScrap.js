@@ -124,6 +124,9 @@ class MojAutoScrap {
                 if(carObj['Marka'] == 'AlfaRomeo') console.log(carObj)
 
                 carObj['cena'] = $('.priceHigh span').text().replace(/(\d+[.]\d+).*/, '$1');
+                carObj['Godište'] = $('.basicSingleData').children().eq(1).children().first().text()
+                carObj['Godište'] = parseInt(carObj['Godište'].replace(/([0-9]+). godište/g, '$1'))
+                carObj['Gorivo'] = $('.basicSingleData').children().eq(3).children().last().text()
 
                 let values = [];
                 let fields = [];

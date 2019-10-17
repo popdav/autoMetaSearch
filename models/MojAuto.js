@@ -6,7 +6,7 @@ let mojSchema = new mongoose.Schema({
     "Vozilo:":String,
     "Marka": String,
     "Model": String,
-    "Godište": String,
+    "Godište": Number,
     "Kilometraža": String,
     "Karoserija": String,
     "Gorivo": String,

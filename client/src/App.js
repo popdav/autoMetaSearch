@@ -14,6 +14,9 @@ class App extends Component {
       selectedMark: undefined,
       models : [],
       selectedModel: undefined,
+      fromYear: 'None',
+      toYear: 'None',
+      years: [...Array(120).keys()].map(i => i + 1900)
     }
 
     this.load = this.load.bind(this)
@@ -22,6 +25,8 @@ class App extends Component {
     this.markChange = this.markChange.bind(this)
     this.modelChange = this.modelChange.bind(this)
     this.clickSearch = this.clickSearch.bind(this)
+    this.toYearChange = this.toYearChange.bind(this)
+    this.fromYearChange = this.fromYearChange.bind(this)
   }
 
   load() {
@@ -116,16 +121,34 @@ class App extends Component {
     })
   }
 
+  fromYearChange = (e) => {
+    e.persist()
+    console.log(e.target.value)
+    this.setState({
+      fromYear: e.target.value
+    })
+  }
+
+
+  toYearChange = (e) => {
+    e.persist()
+    console.log(e.target.value)
+    this.setState({
+      toYear: e.target.value
+    })
+  }
+
   clickSearch = (e) => {
     e.preventDefault()
     let body = {
       findQuery:{
         Marka: this.state.selectedMark === 'None' ? undefined : this.state.selectedMark,
         Model: this.state.selectedModel === 'None' ? undefined : this.state.selectedModel,
+        Godište: {$lte:this.state.toYear === 'None' ? undefined : parseInt(this.state.toYear), $gte:this.state.fromYear === 'None' ? undefined : parseInt(this.state.fromYear)}
       },
       chunkNumber: 1
     }
-    console.log(this.state.selectedMark)
+    console.log(body)
     axios.post('/findPolovni', body)
       .then((res) => {
         this.setState({ cars: res.data })
@@ -167,8 +190,32 @@ class App extends Component {
               })}
             </select>
           </div>
+
+          <div className="form-inline form-group mx-sm-3 mb-2">
+            <label  htmlFor="odGodina">Od godine:</label>
+            <select onChange={this.fromYearChange} className="form-control" id="odGodina">
+              <option>None</option>
+              {this.state.years.map((elem, i) => {
+                return(
+                  <option key={i + elem}>{elem}</option>
+                )
+              })}
+            </select>
+            
+            <label htmlFor="doGodina">Do godine:</label>
+            <select onChange={this.toYearChange} className="form-control" id="doGodina">
+              <option>None</option>
+              {this.state.years.map((elem, i) => {
+                return(
+                  <option key={i + elem}>{elem}</option>
+                )
+              })}
+            </select>
+
+          </div>
+
           <div className="form-group">
-          <button onClick={this.clickSearch} type="submit" className="btn btn-primary mb-2">Search</button>
+            <button onClick={this.clickSearch} type="submit" className="btn btn-primary mb-2">Search</button>
           </div>
         </form>
 
@@ -176,7 +223,7 @@ class App extends Component {
 
         {this.state.cars.map((elem, i) => {
           let cena = 'Dogovor'
-          if(elem['cena'] != '') cena = elem['cena']
+          if(elem['cena'] !== '') cena = elem['cena']
           return (
             <div className="" key={i}>
               <div onClick={()=> window.open(elem["link"], "_blank")} className="media-car media border border-info rounded">
@@ -185,7 +232,7 @@ class App extends Component {
                   <h5 className="mt-0">{elem['Marka'] + ' ' + elem['Model'] }</h5>
                   <p>
                      
-                    <b>{"   Godište: " }</b> { elem['Godište'] }
+                    <b>{"   Godište: " }</b> { elem['Godište']  + '. godište'}
                     <br/>
                     <b>{"Gorivo: " }</b> { elem['Gorivo'] }
                     <b>{"   Karoserija: " }</b> { elem['Karoserija'] }

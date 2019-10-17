@@ -73,6 +73,9 @@ class PolovniScrap {
                         // this.idMap.add(vals[i])
                     }
                     carObj[keys[i]] = vals[i]
+
+                    if(keys[i] == 'Godište')
+                        carObj[keys[i]] = parseInt(carObj[keys[i]].replace(/([0-9]+). godište/g, '$1'))
                 }
 
                 
@@ -95,6 +98,7 @@ class PolovniScrap {
 
                 for(let i=0; i<keys.length; i++) {
                     carObj[keys[i]] = vals[i];
+                    
                 }
 
                 let carSafety = $('h2').filter(function() {
