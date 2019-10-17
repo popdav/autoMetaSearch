@@ -1,6 +1,6 @@
-const DB = require('./database')
-const polovniModel = require('./models/PolovniAutomobili')
-const mojModel = require('./models/MojAuto')
+const DB = require('../../database')
+const polovniModel = require('../../models/PolovniAutomobili')
+const mojModel = require('../../models/MojAuto')
 const Mongo = require('mongodb')
 
 class MongoService {
@@ -81,7 +81,6 @@ class MongoService {
                             .find(object)
                             .skip(20 * (chunkNumber-1))
                             .limit(20)
-                            .toArray()
         }
         catch (err) {
             console.log(err);
@@ -98,7 +97,6 @@ class MongoService {
                 .find(object)
                 .skip(20 * (chunkNumber-1))
                 .limit(20)
-                .toArray()
         }
         catch (err) {
             console.log(err);

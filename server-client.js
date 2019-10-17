@@ -3,7 +3,7 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const Mongo = require('mongodb')
-const MongoService = require('/services/dbServices/mongo-select-service')
+const MongoService = require('./services/dbServices/mongo-select-service')
 
 const app = express()
 
