@@ -42,13 +42,14 @@ app.post('/findPolovni', async (req, res) => {
 
 });
 
-app.post('/makeUnique', (req, res) => {
-    const result = dbUniqueContent.makeUniqe();
+app.post('/makeUnique', async (req, res) => {
+    const result = await dbUniqueContent.makeUniqe();
     res.send(result);
 });
 
-app.post('/modelUnique', (req, res) => {
-    const result = dbUniqueContent.modelUnique(req.body.model);
+app.post('/modelUnique', async (req, res) => {
+    console.log(req.body.model)
+    const result = await dbUniqueContent.modelUnique(req.body.model);
     res.send(result);
 });
 

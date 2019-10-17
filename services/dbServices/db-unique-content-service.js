@@ -16,27 +16,28 @@ class DbUniqueContent {
                 let tmpResult = await dbModel
                     .find()
                     .distinct('Marka');
-
-                result.concat(tmpResult);
+                result = result.concat(tmpResult);
             }
         }
         catch (err) {
             console.log(err);
             throw err;
         }
-
-        return new Set(result);
+        let resultSet = new Set(result)
+        return [...resultSet];
     }
+
+
     async modelUnique(model) {
         let result = [];
 
         try {
             for(let dbModel of this.models) {
                 let tmpResult = await dbModel
-                    .find({Model: model})
+                    .find({'Marka': model})
                     .distinct('Model');
 
-                result.concat(tmpResult);
+                result = result.concat(tmpResult);
             }
         }
         catch (err) {
@@ -44,7 +45,8 @@ class DbUniqueContent {
             throw err;
         }
 
-        return new Set(result);
+        let resultSet = new Set(result)
+        return [...resultSet];
     }
 }
 

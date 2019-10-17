@@ -39,8 +39,9 @@ class App extends Component {
         console.log(err)
       })
 
-    axios.post('/markUnique')
+    axios.post('/makeUnique')
       .then((res) => {
+        console.log(res.data)
         this.setState({ marks: res.data })
         console.log(res.data)
       })
