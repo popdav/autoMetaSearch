@@ -121,9 +121,15 @@ class MojAutoScrap {
                 carObj['Marka'] = carObj['Marka'] == 'Mercedes' ? 'Mercedes Benz' : carObj['Marka']
                 carObj['Marka'] = carObj['Marka'] == 'VW' ? 'Volkswagen' : carObj['Marka']
                 
-                if(carObj['Marka'] == 'AlfaRomeo') console.log(carObj)
+                
+                let cena =  $('.priceHigh span').text().replace(/(\d+[.]\d+).*/, '$1')
+                if(cena !== 'DogovorDogovor' && cena !== '') 
+                    cena = parseInt(cena.replace(/([0-9]+).([0-9]+)/g, '$1$2'))
+                else
+                    cena = -1
 
-                carObj['cena'] = $('.priceHigh span').text().replace(/(\d+[.]\d+).*/, '$1');
+                carObj['cena'] = cena;
+                
                 carObj['Godište'] = $('.basicSingleData').children().eq(1).children().first().text()
                 carObj['Godište'] = parseInt(carObj['Godište'].replace(/([0-9]+). godište/g, '$1'))
                 carObj['Gorivo'] = $('.basicSingleData').children().eq(3).children().last().text()
@@ -157,14 +163,18 @@ class MojAutoScrap {
                             carObj['Karoserija'] = values[i];
                             break;
                         case 'Snaga':
-                                carObj['Snaga motora'] = values[i];
+                                carObj['Snaga motora'] = parseInt(values[i].replace(/([0-9]+) KS \([0-9]+ KW\)/g, '$1'));;
                                 break;
                         case 'Prešao kilometara':
-                                carObj['Kilometraža'] = values[i];
+                                carObj['Kilometraža'] =  parseInt(values[i].replace(/([0-9]+).([0-9]+) km/g, '$1$2'));
+                                //carObj[keys[i]] = carObj[keys[i]].replace(/([0-9]+.[0-9]+) km/g, '$1')
                                 break;
                         default:
                             carObj[fields[i]] = values[i];
                     }
+
+                    if(fields[i] == 'Kubikaža')
+                        carObj[fields[i]] = parseInt(carObj[fields[i]].replace(/([0-9]+) cm3/g, '$1'))
                     
                 }
                 // console.log(carObj)

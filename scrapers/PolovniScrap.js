@@ -51,7 +51,12 @@ class PolovniScrap {
                 carObj['link'] = url
                 carObj['logo'] = 'https://www.polovniautomobili.com/bundles/site/images/polovniautomobili-logo.svg'
                 let pricesElems = $(".price-item");
-                carObj['cena'] = pricesElems.text().trim().slice(0, -2);
+                let cena = pricesElems.text().trim().slice(0, -2)
+                if(cena !== 'Po dogovo' && cena !== '') 
+                    cena = parseInt(cena.replace(/([0-9]+).([0-9]+)/g, '$1$2'))
+                else
+                    cena = -1
+                carObj['cena'] = cena
 
                 let picture = $('ul#image-gallery').children('li').first().attr('data-thumb');
                 carObj['slika'] = picture;
@@ -76,6 +81,13 @@ class PolovniScrap {
 
                     if(keys[i] == 'Godište')
                         carObj[keys[i]] = parseInt(carObj[keys[i]].replace(/([0-9]+). godište/g, '$1'))
+                    else if(keys[i] == 'Kilometraža')
+                        carObj[keys[i]] = parseInt(carObj[keys[i]].replace(/([0-9]+).([0-9]+) km/g, '$1$2'))
+                    else if(keys[i] == 'Kubikaža')
+                        carObj[keys[i]] = parseInt(carObj[keys[i]].replace(/([0-9]+) cm3/g, '$1'))
+                    else if(keys[i] == 'Snaga motora')
+                        carObj[keys[i]] = parseInt(carObj[keys[i]].replace(/[0-9]+\/([0-9]+) \(kW\/KS\)/g, '$1'))
+                    //198.000 km Snaga motora: 120/163 (kW/KS)
                 }
 
                 

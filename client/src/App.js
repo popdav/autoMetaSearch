@@ -228,8 +228,13 @@ class App extends Component {
         <br/>
 
         {this.state.cars.map((elem, i) => {
-          let cena = 'Dogovor'
-          if(elem['cena'] !== '') cena = elem['cena']
+          let cena = '0'
+          console.log(elem['cena'])
+          if(elem['cena'] == -1) 
+            cena = 'Dogovor'
+          else 
+            cena = elem['cena'] + '€'
+
           return (
             <div className="" key={i}>
               <div onClick={()=> window.open(elem["link"], "_blank")} className="media-car media border border-info rounded">
@@ -243,10 +248,10 @@ class App extends Component {
                     <b>{"Gorivo: " }</b> { elem['Gorivo'] }
                     <b>{"   Karoserija: " }</b> { elem['Karoserija'] }
                     <br/>
-                    <b>{"Kilometraža: " }</b> { elem['Kilometraža'] }
-                    <b>{"   Kubikaža: " }</b> { elem['Kubikaža'] }
+                    <b>{"Kilometraža: " }</b> { elem['Kilometraža'] + ' km'}
+                    <b>{"   Kubikaža: " }</b> { elem['Kubikaža']  + ' cm3'}
                     <br/>
-                    <b>{"Snaga motora: " }</b> { elem['Snaga motora'] }
+                    <b>{"Snaga motora: " }</b> { elem['Snaga motora'] + ' KS (' + Math.ceil(elem['Snaga motora'] * 0.745699872) + ' KW)'}
                     <br/>
                     <b>{"   cena: " }</b> { cena}
                     <br/>

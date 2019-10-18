@@ -1,17 +1,17 @@
 let mongoose = require('mongoose')
 
 let mojSchema = new mongoose.Schema({
-    "cena": String,
+    "cena": Number,
     "slika": String,
     "Vozilo:":String,
     "Marka": String,
     "Model": String,
     "Godište": Number,
-    "Kilometraža": String,
+    "Kilometraža": Number,
     "Karoserija": String,
     "Gorivo": String,
-    "Kubikaža": String,
-    "Snaga motora": String,
+    "Kubikaža": Number,
+    "Snaga motora": Number,
     "Fiksna cena": String,
     "Zamena: ": String,
     "Broj oglasa: ": Number,
