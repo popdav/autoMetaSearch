@@ -229,7 +229,6 @@ class App extends Component {
 
         {this.state.cars.map((elem, i) => {
           let cena = '0'
-          console.log(elem['cena'])
           if(elem['cena'] == -1) 
             cena = 'Dogovor'
           else 
