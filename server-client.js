@@ -5,6 +5,8 @@ const methodOverride = require('method-override')
 const Mongo = require('mongodb')
 const MongoService = require('./services/dbServices/mongo-select-service')
 const DbUniqueContent = require('./services/dbServices/db-unique-content-service')
+const SearchAnalytics = require('./services/dbServices/db-search-analytics-service-service');
+const requestIp = require('request-ip');
 
 const app = express()
 
@@ -22,22 +24,32 @@ const polovniModel = require('./models/PolovniAutomobili')
 const mojModel = require('./models/MojAuto')
 const mongoService = new MongoService();
 const dbUniqueContent = new DbUniqueContent();
-
+const searchAnalytics = new SearchAnalytics();
 
 app.post('/smartSearch', async (req, res) => {
 
-    //"sportski,biznis"
-
     // const tags = req.body.tags.split(',');
-    console.log(req.body.tags);
-
+    // console.log(req.body.tags);
+    // const tags = req.body.tags.split(',');
+    // console.log(tags);
     let result = await mongoService.smartSearch(req.body.tags, req.body.chunkNumber);
     res.send(result);
 
 });
 
+app.post('/personalizedSearch', async (req, res) => {
+    const clientIp = requestIp.getClientIp(req);
+
+    let tags = await searchAnalytics.selectUsersStatus(clientIp);
+    let result = await mongoService.smartSearch(tags, req.body.chunkNumber);
+    res.send(result);
+
+});
+
 app.post('/findPolovni', async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
+    const clientIp = requestIp.getClientIp(req);
+    console.log('ADRESA JE : ' + clientIp);
 
     let result = await mongoService.select(req.body.findQuery, req.body.chunkNumber);
     res.send(result);
