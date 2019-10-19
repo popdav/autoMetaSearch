@@ -28,10 +28,10 @@ app.post('/smartSearch', async (req, res) => {
 
     //"sportski,biznis"
 
-    const tags = req.body.tags.split(',');
-    console.log(tags);
+    // const tags = req.body.tags.split(',');
+    console.log(req.body.tags);
 
-    let result = await mongoService.smartSearch(tags, req.body.chunkNumber);
+    let result = await mongoService.smartSearch(req.body.tags, req.body.chunkNumber);
     res.send(result);
 
 });
@@ -46,13 +46,13 @@ app.post('/findPolovni', async (req, res) => {
 
 app.post('/makeUnique', async (req, res) => {
     const result = await dbUniqueContent.makeUniqe();
-    res.send(result);
+    res.send(result.sort());
 });
 
 app.post('/modelUnique', async (req, res) => {
     console.log(req.body.model)
     const result = await dbUniqueContent.modelUnique(req.body.model);
-    res.send(result);
+    res.send(result.sort());
 });
 
 

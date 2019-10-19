@@ -62,12 +62,14 @@ class MongoService {
             queryData.push(this.smartSearchMap.get(tag));
         });
 
+        console.log(queryData)
+
         for(let data of queryData) {
             queryObjects = queryObjects.concat(data);
         }
 
         for(let queryObject of queryObjects) {
-            let tmpRes = await this.select(queryObjects, chunkNumber);
+            let tmpRes = await this.select(queryObject, chunkNumber);
             result = result.concat(tmpRes);
         }
         return result;

@@ -16,17 +16,38 @@ class App extends Component {
       selectedModel: undefined,
       fromYear: 'None',
       toYear: 'None',
-      years: [...Array(120).keys()].map(i => i + 1900)
+      years: [...Array(80).keys()].map(i => i + 1940).reverse(),
+      fuel: ['Dizel', 'Benzin'],
+      type: [],
+      km: [...Array(11).keys()].map(i => i * 20000).reverse(),
+      tags: [],
+      inputTag: ''
     }
 
     this.load = this.load.bind(this)
     this.loadMore = this.loadMore.bind(this)
+    this.loadMoreTag = this.loadMoreTag.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
+
+    this.clickSearch = this.clickSearch.bind(this)
     this.markChange = this.markChange.bind(this)
     this.modelChange = this.modelChange.bind(this)
-    this.clickSearch = this.clickSearch.bind(this)
     this.toYearChange = this.toYearChange.bind(this)
     this.fromYearChange = this.fromYearChange.bind(this)
+    this.handleGas = this.handleGas.bind(this)
+    this.handleType = this.handleType.bind(this)
+    this.fromKm = this.fromKm.bind(this)
+    this.toKm = this.toKm.bind(this)
+    this.fromKub = this.fromKub.bind(this)
+    this.toKub = this.toKub.bind(this)
+    this.fromHp = this.fromHp.bind(this)
+    this.toHp = this.toHp.bind(this)
+    this.fromPrice = this.fromPrice.bind(this)
+    this.toPrice = this.toPrice.bind(this)
+
+    this.addTag = this.addTag.bind(this)
+    this.handleCloseClick = this.handleCloseClick.bind(this)
+    this.inputTagChange = this.inputTagChange.bind(this)
   }
 
   load() {
@@ -85,7 +106,16 @@ class App extends Component {
     console.log(e.target.scrollingElement.scrollHeight - e.target.scrollingElement.scrollTop)
     console.log(e.target.scrollingElement.clientHeight)
     if (bottom) {
-      this.loadMore()
+      if(this.state.tags.length === 0){
+        console.log('usao')
+        this.loadMore()
+      }
+        
+      else {
+        console.log('usao tag')
+        this.loadMoreTag()
+      }
+        
     }
   };
 
@@ -139,6 +169,46 @@ class App extends Component {
     })
   }
 
+  handleGas = (e) => {
+    e.persist()
+  }
+
+  handleType = (e) => {
+    e.persist()
+  }
+
+  toKm = (e) => {
+    e.persist()
+  }
+
+  fromKm = (e) => {
+    e.persist()
+  }
+
+  toKub = (e) => {
+    e.persist()
+  }
+
+  fromKub = (e) => {
+    e.persist()
+  }
+
+  toHp = (e) => {
+    e.persist()
+  }
+
+  fromHp = (e) => {
+    e.persist()
+  }
+
+  toPrice = (e) => {
+    e.persist()
+  }
+
+  fromPrice = (e) => {
+    e.persist()
+  }
+
   clickSearch = (e) => {
     e.preventDefault()
     let godisteBody = {$lte:this.state.toYear === 'None' ? undefined : parseInt(this.state.toYear), $gte:this.state.fromYear === 'None' ? undefined : parseInt(this.state.fromYear)}
@@ -165,6 +235,62 @@ class App extends Component {
       })
 
   }
+  loadMoreTag = () => {
+    let body = {
+      tags : this.state.tags,
+      chunkNumber: this.state.chunkNumber + 1
+    }
+    console.log(body)
+    axios.post('/smartSearch', body)
+      .then((res) => {
+        this.setState({
+          cars: [...this.state.cars, ...res.data]
+        })
+        console.log(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  addTag = (e) => {
+    e.preventDefault()
+    let newP =  this.state.inputTag
+    let tagsarr = this.state.tags
+    tagsarr.push(newP)
+
+    let body = {
+      tags : tagsarr,
+      chunkNumber: this.state.chunkNumber 
+    }
+    console.log(body)
+    axios.post('/smartSearch', body)
+      .then((res) => {
+        this.setState({
+          cars: res.data,
+          tags: tagsarr
+        })
+        console.log(res.data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+
+  }
+
+  inputTagChange = (e) => {
+    e.persist()
+    this.setState({
+      inputTag: e.target.value
+    })
+  }
+
+  handleCloseClick =  (i) => {
+    let arr = [...this.state.tags]
+    arr.splice(i)
+    this.setState({
+      tags: arr
+    })
+  }
 
   render() {
 
@@ -179,7 +305,7 @@ class App extends Component {
               <option>None</option>
               {this.state.marks.map((elem, i) => {
                 return(
-                  <option key={i + elem}>{elem}</option>
+                  <option key={i + elem + 14}>{elem}</option>
                 )
               })}
             </select>
@@ -191,7 +317,7 @@ class App extends Component {
               <option>None</option>
               {this.state.models.map((elem, i) => {
                 return(
-                  <option key={i + elem}>{elem}</option>
+                  <option key={i + elem + 13}>{elem}</option>
                 )
               })}
             </select>
@@ -203,7 +329,7 @@ class App extends Component {
               <option>None</option>
               {this.state.years.map((elem, i) => {
                 return(
-                  <option key={i + elem}>{elem}</option>
+                  <option key={i + elem + 12 * Math.random()}>{elem}</option>
                 )
               })}
             </select>
@@ -213,17 +339,111 @@ class App extends Component {
               <option>None</option>
               {this.state.years.map((elem, i) => {
                 return(
-                  <option key={i + elem}>{elem}</option>
+                  <option key={i + elem + 11* Math.random()}>{elem}</option>
+                )
+              })}
+            </select>
+ 
+
+            <label  htmlFor="gorivo">Gorivo:</label>
+            <select onChange={this.handleGas} className="form-control" id="gorivo">
+              <option>None</option>
+              {this.state.fuel.map((elem, i) => {
+                return(
+                  <option key={i + elem + 10}>{elem}</option>
+                )
+              })}
+            </select>
+            
+            <label htmlFor="karoserija">Karoserija:</label>
+            <select onChange={this.handleType} className="form-control" id="karoserija">
+              <option>None</option>
+              {this.state.type.map((elem, i) => {
+                return(
+                  <option key={i + elem + 9}>{elem}</option>
                 )
               })}
             </select>
 
           </div>
+            
+          <div className="form-inline form-group mx-sm-3 mb-2">
+            <label  htmlFor="odKilometraza">Kilometraža od:</label>
+            <select onChange={this.fromKm} className="form-control" id="odKilometraza">
+              <option>None</option>
+              
+            </select>
+            
+            <label htmlFor="doKm">Kilometraža do:</label>
+            <select onChange={this.toKm} className="form-control" id="doKm">
+              <option>None</option>
+              {this.state.km.map((elem, i) => {
+                return(
+                  <option key={i + elem +7}>{elem}</option>
+                )
+              })}
+            </select>
+          
+
+            <label  htmlFor="odKub">Kubikaža od:</label>
+            <select onChange={this.fromKub} className="form-control" id="odKub">
+              <option>None</option>
+              
+            </select>
+            
+            <label htmlFor="doKub">Kubikaža do:</label>
+            <select onChange={this.toKub} className="form-control" id="doKub">
+              <option>None</option>
+              
+            </select>
+          </div>
+
+          <div className="form-inline form-group mx-sm-3 mb-2">
+            <label  htmlFor="odSnaga">Snaga motora od:</label>
+            <select onChange={this.fromHp} className="form-control" id="odSnaga">
+              <option>None</option>
+              
+            </select>
+            
+            <label htmlFor="doSnaga">Snaga motora do:</label>
+            <select onChange={this.toHp} className="form-control" id="doSnaga">
+              <option>None</option>
+              
+            </select>
+          
+
+            <label  htmlFor="odcena">Cena od:</label>
+            <select onChange={this.fromPrice} className="form-control" id="odcena">
+              <option>None</option>
+              
+            </select>
+            
+            <label htmlFor="docena">Cena do:</label>
+            <select onChange={this.toPrice} className="form-control" id="docena">
+              <option>None</option>
+              
+            </select>
+          </div>
+
 
           <div className="form-group">
-            <button onClick={this.clickSearch} type="submit" className="btn btn-primary mb-2">Search</button>
+            <button onClick={this.clickSearch} type="submit" className="btn btn-primary mb-2">Pretraga</button>
           </div>
         </form>
+        
+
+        <form className="form search-bar">
+          
+          <div className="form-inline  form-group mx-sm-3 mb-2">
+            <input onChange={this.inputTagChange} type="text" className="form-control" placeholder="Tag" />
+            <button onClick={this.addTag} type="submit" className="btn btn-primary mb-2">Dodaj</button>
+          </div>
+        </form>
+        {this.state.tags.map((elem, i) => {
+                return(
+                  <p key={i + elem} className="btn btn-primary mb-2"> {elem} <span onClick={(e) => this.handleCloseClick(i)}  className="close">&times;</span> </p>
+                )
+              })}
 
         <br/>
 
