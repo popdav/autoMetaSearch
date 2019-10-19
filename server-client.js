@@ -5,7 +5,7 @@ const methodOverride = require('method-override')
 const Mongo = require('mongodb')
 const MongoService = require('./services/dbServices/mongo-select-service')
 const DbUniqueContent = require('./services/dbServices/db-unique-content-service')
-const SearchAnalytics = require('./services/dbServices/db-search-analytics-service-service');
+const SearchAnalyticsService = require('./services/dbServices/db-search-analytics-service');
 const requestIp = require('request-ip');
 
 const app = express()
@@ -24,7 +24,7 @@ const polovniModel = require('./models/PolovniAutomobili')
 const mojModel = require('./models/MojAuto')
 const mongoService = new MongoService();
 const dbUniqueContent = new DbUniqueContent();
-const searchAnalytics = new SearchAnalytics();
+const searchAnalytics = new SearchAnalyticsService();
 
 app.post('/smartSearch', async (req, res) => {
 
