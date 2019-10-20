@@ -8,6 +8,7 @@ const DbUniqueContent = require('./services/dbServices/db-unique-content-service
 const SearchAnalyticsService = require('./services/dbServices/db-search-analytics-service');
 const requestIp = require('request-ip');
 const cookieParser = require('cookie-parser');
+const CHandler = require('./cookieHandler/cookie-handler');
 
 const app = express()
 
@@ -27,6 +28,7 @@ const mojModel = require('./models/MojAuto')
 const mongoService = new MongoService();
 const dbUniqueContent = new DbUniqueContent();
 const searchAnalytics = new SearchAnalyticsService();
+const CookieHandler = new CHandler();
 
 app.get('/getCarsForMe', (req, res) => {
     let status = req.cookies['status'];
@@ -40,7 +42,9 @@ app.get('/getCarsForMe', (req, res) => {
 
 app.post('/smartSearch', async (req, res) => {
 
-    res.cookie('status', req.body.tags);
+    CookieHandler.updateInformation(req.body.tags);
+    let mostSearched = CookieHandler.getMostSearched();
+    res.cookie('status', mostSearched, {maxAge: 360000});
     let result = await mongoService.smartSearch(req.body.tags, req.body.chunkNumber);
     console.log('Cookie set');
     res.send(result);
