@@ -7,6 +7,7 @@ const MongoService = require('./services/dbServices/mongo-select-service')
 const DbUniqueContent = require('./services/dbServices/db-unique-content-service')
 const SearchAnalyticsService = require('./services/dbServices/db-search-analytics-service');
 const requestIp = require('request-ip');
+const cookieParser = require('cookie-parser');
 
 const app = express()
 
@@ -15,9 +16,10 @@ const port = process.env.PORT || 5001
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 
-app.use(bodyParser.json({ limit: '100gb', extended: true }))
-app.use(bodyParser.urlencoded({ limit: '100gb', extended: true }))
-app.use(methodOverride())
+app.use(bodyParser.json({ limit: '100gb', extended: true }));
+app.use(bodyParser.urlencoded({ limit: '100gb', extended: true }));
+app.use(methodOverride());
+app.use(cookieParser());
 
 const DB = require('./database')
 const polovniModel = require('./models/PolovniAutomobili')
@@ -26,13 +28,21 @@ const mongoService = new MongoService();
 const dbUniqueContent = new DbUniqueContent();
 const searchAnalytics = new SearchAnalyticsService();
 
+app.get('/getCarsForMe', (req, res) => {
+    let status = req.cookies['status'];
+    if(status) {
+        res.send(status);
+    }
+    else {
+        res.send('No cookie');
+    }
+});
+
 app.post('/smartSearch', async (req, res) => {
 
-    // const tags = req.body.tags.split(',');
-    // console.log(req.body.tags);
-    // const tags = req.body.tags.split(',');
-    // console.log(tags);
+    res.cookie('status', req.body.tags);
     let result = await mongoService.smartSearch(req.body.tags, req.body.chunkNumber);
+    console.log('Cookie set');
     res.send(result);
 
 });
@@ -43,7 +53,6 @@ app.post('/personalizedSearch', async (req, res) => {
     let tags = await searchAnalytics.selectUsersStatus(clientIp);
     let result = await mongoService.smartSearch(tags, req.body.chunkNumber);
     res.send(result);
-
 });
 
 app.post('/findPolovni', async (req, res) => {
