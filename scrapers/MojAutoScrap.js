@@ -108,7 +108,8 @@ class MojAutoScrap {
                 let carObj = {};
                 carObj['logo'] = 'https://www.mojauto.rs/resources/images/logo-redesign.png';
                 carObj['link'] = url;
-                
+                carObj['Postoji'] = true
+
                 const picture = $('a#advertThumb_0').find('img').attr('src')
               
                 carObj['slika'] = 'https://www.mojauto.rs' + picture
