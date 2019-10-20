@@ -27,6 +27,7 @@ class App extends Component {
 
     this.clickShowSearch = this.clickShowSearch.bind(this)
     this.clickShowTags = this.clickShowTags.bind(this)
+    this.clickForMe = this.clickForMe.bind(this)
   }
 
   UNSAFE_componentWillReceiveProps(props) {
@@ -63,8 +64,6 @@ class App extends Component {
       axios.post('/smartSearch', body)
       .then((res) => {
         this.setState({ 
-
-
           cars: [...res.data],
           tags: newTags
          })
@@ -179,6 +178,44 @@ class App extends Component {
     }
   }
 
+  clickForMe = () => {
+    axios.get('/getCarsForMe')
+      .then((res) => {
+        console.log(res.data)
+        if(res.data.length === 0){
+          alert('Niste koristili pretragu po tagovima!')
+        } else {
+          let arrTags = [...res.data]
+          console.log(res.data)
+          let body = {
+            tags: arrTags,
+            chunkNumber: 1
+          }
+          console.log(body)
+          axios.post('/smartSearch', body)
+          .then((res) => {
+            
+              this.setState({ 
+                cars: [...res.data],
+                tags: arrTags
+              })
+              this.props.addCars(res.data)
+              console.log(res.data)
+            
+            
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+        }
+        
+
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   render() {
     let styleSearch = {};
     if(!this.state.showSearch)
@@ -194,6 +231,8 @@ class App extends Component {
         <button onClick={this.clickShowSearch} type="submit" className="btn btn-primary mb-2">Pretraga po parametrima</button>
         <span>{" "}</span>
         <button onClick={this.clickShowTags} type="submit" className="btn btn-primary mb-2">Pretraga sa tagovima</button>
+        <span>{" "}</span>
+        <button onClick={this.clickForMe} type="submit" className="btn btn-primary mb-2">Preporucena kola</button>
         <br/>
         
         <div style={styleSearch}>

@@ -34,7 +34,7 @@ app.get('/getCarsForMe', (req, res) => {
         res.send(status);
     }
     else {
-        res.send('No cookie');
+        res.send([]);
     }
 });
 
