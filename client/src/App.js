@@ -11,7 +11,7 @@ import { MobileView } from "react-device-detect";
 import ReactGA from 'react-ga';
 
 function initializeReactGA() {
-  ReactGA.initialize('UA-150447549-1');
+  ReactGA.initialize('UA-150367552-1');
   ReactGA.pageview('/');
 }
 
