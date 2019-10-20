@@ -7,6 +7,13 @@ import CarMedia from './CarMedia'
 import SearchBar from './SearchBar';
 import Tags from './Tags'
 import { addCars } from "./js/actions/index";
+import { MobileView } from "react-device-detect";
+import ReactGA from 'react-ga';
+
+function initializeReactGA() {
+  ReactGA.initialize('UA-150447549-1');
+  ReactGA.pageview('/');
+}
 
 class App extends Component {
   constructor(props) {
@@ -133,6 +140,7 @@ class App extends Component {
 
   componentDidMount() {
     this.load()
+    initializeReactGA()
     this.scrollListener = window.addEventListener("scroll", this.handleScroll)
   }
 
@@ -197,7 +205,9 @@ class App extends Component {
             
               this.setState({ 
                 cars: [...res.data],
-                tags: arrTags
+                tags: arrTags,
+                showSearch: false,
+                showTags: false
               })
               this.props.addCars(res.data)
               console.log(res.data)
@@ -225,6 +235,8 @@ class App extends Component {
     let styleTags = {};
     if(!this.state.showTags)
       styleTags = {display: "none"};
+
+    let mobileStyle = { "text-align" : "center" }
     
     return (
       <div className="App container">
@@ -243,7 +255,14 @@ class App extends Component {
         </div>
         
         <br/>
-        <CarMedia />        
+        <CarMedia />
+
+        <div style={mobileStyle}>
+          <MobileView>
+            <button onClick={this.loadMore} type="submit" className="btn btn-primary mb-2">Učitaj još</button>
+          </MobileView>    
+        </div>
+
       </div>
     );
   }
