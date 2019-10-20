@@ -1,6 +1,7 @@
 let mongoose = require('mongoose')
 
 let polovniSchema = new mongoose.Schema({
+    "Postoji": {type: Boolean, default:true},
     "cena": Number,
     "slika": String,
     "Vozilo:":String,
