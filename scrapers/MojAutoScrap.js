@@ -1,12 +1,16 @@
 const axios = require('axios');
 const cheerio=require('cheerio');
 
+const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
+
 const url  = 'https://www.mojauto.rs/rezultat/status/automobili/vozilo_je/polovan/poredjaj-po/oglas_najnoviji/po_stranici/20/prikazi_kao/lista/';
 let mojModel = require('../models/MojAuto')
 class MojAutoScrap {
     constructor(url) {
         this.url = url;
     }
+
+
 
     scrapeLoop() {
             axios.get(this.url, {
@@ -56,7 +60,7 @@ class MojAutoScrap {
                                 mojModel.countDocuments({link:  linkFind}, (err, count) => {
                                     if(err) throw err
                                     
-                                    console.log('Broj: ' + count + ' link: ' + linkFind)
+                                    // console.log('Broj: ' + count + ' link: ' + linkFind)
                                     if(count != 0)
                                         urls.splice(i)
                                     resolve()
@@ -78,12 +82,13 @@ class MojAutoScrap {
         });
     }
 
-    iteratePages(numOfPages) {
+    async iteratePages(numOfPages) {
         // const url = 'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=1&sort=basic&brand=audi&city_distance=0&showOldNew=all&without_price=1';
         // console.log(numOfPages)
-        for(let i=1;i<=10;i++) {
+        for(let i=1;i<=50;i++) {
             let tmp_url = this.url + 'stranica/' + i;
-            this.scrapeUrls(tmp_url)
+            this.scrapeUrls(tmp_url);
+            await sleep(5000);
         }
     }
 
@@ -93,7 +98,9 @@ class MojAutoScrap {
         return Math.ceil(numOfAdds/20);
     }
 
-    scrapeCar(url) {
+    async scrapeCar(url) {
+
+        await sleep(5000);
         url = 'https://www.mojauto.rs' + url;
         // console.log(url);
         axios.get(url, {
