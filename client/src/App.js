@@ -236,7 +236,7 @@ class App extends Component {
     if(!this.state.showTags)
       styleTags = {display: "none"};
 
-    let mobileStyle = { "text-align" : "center" }
+    let mobileStyle = { "textAlign" : "center" }
     
     return (
       <div className="App container">
