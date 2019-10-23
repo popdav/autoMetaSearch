@@ -2,10 +2,20 @@
   /* margin-left: 10%;
   margin-right: 10%; */
 }
+.btnComapre {
+  position: fixed; 
+  margin-left: 72%;
+}
+.btnAddCmp {
+  float:right;
+}
 
-.media-car:hover{
+/* .media-car:hover{
   background-color: lightblue;
   opacity: 0.6;
+} */
+.img-thumbnail:hover {
+  cursor: pointer;
 }
 .search-bar{
   background-color: whitesmokes
