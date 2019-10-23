@@ -6,6 +6,8 @@ let polovniModel = require('../models/PolovniAutomobili')
 
 const url = 'https://www.polovniautomobili.com/auto-oglasi/pretraga?page=1&sort=basic&brand=audi&city_distance=0&showOldNew=all&without_price=1';
 
+const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
+
 class PolovniScrap {
 
     constructor(url) {
@@ -38,9 +40,10 @@ class PolovniScrap {
         })
     }
 
-    scrapeCar(url) {
+    async scrapeCar(url) {
+        await sleep(5000);
         axios.get(url)
-        .then((response) => {
+        .then(async (response) => {
 
             if(response.status == 200) {
 
@@ -173,8 +176,9 @@ class PolovniScrap {
         urls.forEach(url => this.scrapeCar(url));
     }
 
-    scrapeUrls(url) {
-        let promiseUrl = []
+    async scrapeUrls(url) {
+        let promiseUrl = [];
+        await sleep(5000);
         axios.get(url)
         .then((response) => {
 

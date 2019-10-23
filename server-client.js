@@ -33,7 +33,8 @@ const CookieHandler = new CHandler();
 app.get('/getCarsForMe', (req, res) => {
     let status = req.cookies['status'];
     if(status) {
-        res.send(status);
+        let mostSearched = CookieHandler.getMostSearched(status);
+        res.send(mostSearched);
     }
     else {
         res.send([]);
@@ -41,12 +42,17 @@ app.get('/getCarsForMe', (req, res) => {
 });
 
 app.post('/smartSearch', async (req, res) => {
-
-    CookieHandler.updateInformation(req.body.tags);
-    let mostSearched = CookieHandler.getMostSearched();
-    res.cookie('status', mostSearched, {maxAge: 360000});
+    let previousState = req.cookies['status'];
+    let cookie;
+    if(previousState === undefined) {
+        cookie = CookieHandler.updateInformation(req.body.tags, []);
+    }
+    else {
+        cookie = CookieHandler.updateInformation(req.body.tags, previousState);
+    }
+    res.cookie('status', cookie, {maxAge: 360000});
     let result = await mongoService.smartSearch(req.body.tags, req.body.chunkNumber);
-    console.log('Cookie set');
+    console.log(cookie);
     res.send(result);
 
 });
