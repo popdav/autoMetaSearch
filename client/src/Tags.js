@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import './bootstrap.min.css'
+
 import './App.css';
 import { addTags } from './js/actions/index'
-// import axios from 'axios'
 
 
 class Tags extends Component {
@@ -11,71 +11,91 @@ class Tags extends Component {
     super(props);
     this.state = {
         tags : [],
-        allTags: ['sportski', 'biznis']
+        isChecked: {'sportski':false, 'biznis':false, "gradski":false, "porodicni":false, "studentski":false},
+        allTags: ['sportski', 'biznis', "gradski", "porodicni", "studentski"]
     }
   }
 
   addTag = (e) => {
-    e.preventDefault()
     console.log('Vrednost:')
-    console.log(e.target.value)
-    let newP =  e.target.value
+    console.log(e.target.name)
+    let newP =  e.target.name
     let tagsarr = [...this.state.tags]
-    tagsarr.push(newP)
+    
+
+    let newCheck = Object.assign({}, this.state.isChecked) 
+
+    newCheck[newP] = !this.state.isChecked[newP]
+    console.log(newCheck)
+    
+    if(newCheck[newP]) {
+      tagsarr.push(newP)
+    } else {
+      for( var i = 0; i < tagsarr.length; i++){ 
+        if ( tagsarr[i] === newP) {
+          tagsarr.splice(i, 1); 
+        }
+     }
+    }
+      
+    console.log(tagsarr)
 
     this.setState({
-        tags : tagsarr
+        tags : tagsarr,
+        isChecked : newCheck
     })
-    this.props.addTags(tagsarr)
+    
  
 
   }
 
-  inputTagChange = (e) => {
-    e.persist()
-    this.setState({
-      inputTag: e.target.value
-    })
+  clickSearch = (e) => {
+    e.preventDefault()
+    let tagsarr = [...this.state.tags]
+    this.props.addTags(tagsarr)
   }
 
-  handleCloseClick =  (i) => {
-    let arr = [...this.state.tags]
-    arr.splice(i, 1)
+  // handleCloseClick =  (i) => {
+  //   let arr = [...this.state.tags]
+  //   arr.splice(i, 1)
     
-    this.setState({
-      tags: arr
-    })
-    this.props.addTags(arr)
-  }
+  //   this.setState({
+  //     tags: arr
+  //   })
+  //   this.props.addTags(arr)
+  // }
 
   render() {
+
+    
     
     return (
       <div>
-
-        <form className="form search-bar">
-          
-          <div className="form-inline  form-group mx-sm-3 mb-2">
-            {/* <input onChange={this.inputTagChange} type="text" className="form-control" placeholder="Tag" />
-            <button onClick={this.addTag} type="submit" className="btn btn-primary mb-2">Dodaj</button> */}
-            {this.state.allTags.map((e, i) => {
-                return(
-                    <div key={i}>
-                        <button  onClick={this.addTag} value={e} type="submit" className="btn btn-secondary mb-2">{e}</button>
-                        <span>&nbsp;</span>
-                    </div>
-                )
-            })}
+        <form className="form">
+          {this.state.allTags.map((e, i) => {
+              return(
+                  <div key={e}>
+                    <input checked={this.state.isChecked[e]} onChange={this.addTag} className="form-check-input" type="checkbox" name={e}  />
+                    {e}
+                  </div>
+                
+                
+              )
+          })}
+          <div className="form-group">
+            <button onClick={this.clickSearch} type="submit" className="btn btn-primary mb-2">Pretraga</button>
           </div>
         </form>
-        {this.state.tags.map((elem, i) => {
+        
+
+        {/* {this.state.tags.map((elem, i) => {
             return(
                 <span key={i + elem}>
                     <p  className="btn btn-primary mb-2"> {elem} <span onClick={(e) => this.handleCloseClick(i)}  className="close">&times;</span> </p>&nbsp;
                 </span>
             )
-        })}
-      
+        })} */}
+        
       </div> 
     );
   }

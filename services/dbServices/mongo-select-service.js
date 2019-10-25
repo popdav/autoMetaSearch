@@ -9,6 +9,9 @@ class MongoService {
         this.smartSearchMap = new Map();
         this.smartSearchMap.set('sportski', [{'Marka' : 'Audi', 'Model' : 'A4'}, {'Marka' : 'Fiat', 'Model' : 'Punto'}]);
         this.smartSearchMap.set('biznis', [{'Marka' : 'Audi', 'Model' : 'A6'}, {'Marka' : 'Fiat', 'Model' : 'Bravo'}]);
+        this.smartSearchMap.set("gradski", [{"Kubikaža": [1000,1800]} , {"Karoserija" : ["Hečbek", "Limuzina"]}]);
+        this.smartSearchMap.set("porodicni", [{"Kubikaža": [1600,3000]}, {"Broj sedišta" : "5 sedišta"} , {"Karoserija" : ["Monovolumen (MiniVan)","Karavan", "Limuzina","Džip/SUV"]}]);
+        this.smartSearchMap.set("studentski", [{"Kubikaža": [1000,1800]},  {"Karoserija" : ["Hečbek", "Limuzina"]}]);
     }
 
     mergeArrays(arr1, arr2) {
