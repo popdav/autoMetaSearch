@@ -15,24 +15,62 @@ class CarMedia extends Component {
         elem : newElem,
         cars : [...props.cars],
         cmpCarList : [],
-        btnClasses : "btn btn-primary mb-2 btnAddCmp"
+        isChecked: [...Array(40).keys()].map(e=>false)
     }
     this.clickAddComapre = this.clickAddComapre.bind(this)
   }
 
   clickAddComapre = (e) => {
-    e.preventDefault()
     console.log(e.target.className)
     e.target.disabled = false
     let i = e.target.value
-    let tmpCmpCarList = [...this.state.cmpCarList]
-    tmpCmpCarList.push(this.props.cars[i])
-    this.props.addCmpCars(tmpCmpCarList)
-    this.setState({
-      cmpCarList: tmpCmpCarList,
-      // btnClasses : "btn btn-primary mb-2 btnAddCmp disabled"
-    })
 
+    // let newCheckVal = !this.state.isChecked[i]
+    let newCheckArr = [...this.state.isChecked]
+    newCheckArr[i] = !this.state.isChecked[i]
+    if(newCheckArr[i]){
+      let tmpCmpCarList = [...this.state.cmpCarList]
+      tmpCmpCarList.push(this.props.cars[i])
+      this.props.addCmpCars(tmpCmpCarList)
+      this.setState({
+        cmpCarList: tmpCmpCarList,
+        isChecked: newCheckArr
+      })
+    } else {
+      let tmpCmpCarList = [...this.state.cmpCarList]
+
+      for( var j = 0; j < tmpCmpCarList.length; j++){ 
+        if (isEquivalent(tmpCmpCarList[j], this.props.cars[i])) {
+          tmpCmpCarList.splice(j, 1); 
+        }
+     }
+
+      console.log(tmpCmpCarList)
+      this.props.addCmpCars(tmpCmpCarList)
+      this.setState({
+        cmpCarList: tmpCmpCarList,
+        isChecked: newCheckArr
+      })
+    }
+
+    
+
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
+    if(nextProps.cars.length !== this.state.isChecked.length){
+      let newArr = []
+      for(let i=this.state.isChecked.length; i<nextProps.cars.length; i++)
+        newArr.push(false)
+
+      let isCheckedNew = [...this.state.isChecked, ...newArr]
+      console.log(isCheckedNew)
+
+      this.setState({
+        isChecked: isCheckedNew
+      })
+    }
   }
 
   render() {
@@ -69,7 +107,10 @@ class CarMedia extends Component {
                   <br/>
                 </p>
                 <img onClick={()=> window.open(elem["link"], "_blank")} className="img-thumbnail btn" src={elem['logo']} alt="Auto" />
-                <button onClick={this.clickAddComapre} disabled={false} value={i} type="submit" className={this.state.btnClasses}>Dodaj u poredi</button>
+                <span className="form-check btnAddCmp">
+                  <input checked={this.state.isChecked[i]} onChange={this.clickAddComapre} value={i} type="checkbox" className="form-check-input" id="cmpCheck"/>
+                  <label  className="form-check-label" htmlFor="cmpCheck">Dodaj u poredjenje</label>
+                </span>
               </div>
             
           </div>
@@ -95,3 +136,23 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarMedia);
+
+
+
+function isEquivalent(a, b) {
+  let aProps = Object.getOwnPropertyNames(a);
+  let bProps = Object.getOwnPropertyNames(b);
+
+  if (aProps.length !== bProps.length) {
+      return false;
+  }
+
+  for (let i = 0; i < aProps.length; i++) {
+      let propName = aProps[i];
+
+      if (a[propName] !== b[propName]) {
+          return false;
+      }
+  }
+  return true;
+}

@@ -144,6 +144,10 @@ class CarView extends Component {
     this.scrollListener = window.addEventListener("scroll", this.handleScroll)
   }
 
+  componentWillUnmount = () => {
+    window.removeEventListener("scroll", this.handleScroll);
+  }
+
   handleScroll = (e) => {
     e.preventDefault()
     const bottom = e.target.scrollingElement.scrollHeight - e.target.scrollingElement.scrollTop  <= e.target.scrollingElement.clientHeight
@@ -285,12 +289,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(CarView);
 
 
 function isEquivalent(a, b) {
-  // Create arrays of property names
   let aProps = Object.getOwnPropertyNames(a);
   let bProps = Object.getOwnPropertyNames(b);
 
-  // If number of properties is different,
-  // objects are not equivalent
   if (aProps.length !== bProps.length) {
       return false;
   }
@@ -298,14 +299,9 @@ function isEquivalent(a, b) {
   for (let i = 0; i < aProps.length; i++) {
       let propName = aProps[i];
 
-      // If values of same property are not equal,
-      // objects are not equivalent
       if (a[propName] !== b[propName]) {
           return false;
       }
   }
-
-  // If we made it this far, objects
-  // are considered equivalent
   return true;
 }
