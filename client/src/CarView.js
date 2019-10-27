@@ -203,7 +203,6 @@ class CarView extends Component {
           body: newBody
         })
         this.props.addCars(carsNew)
-        console.log(this.state)
       })
       .catch((err) => {
         console.log(err)
@@ -228,7 +227,7 @@ class CarView extends Component {
       styleSideBar = "sidebar media-card rounded"
       styleRight = "right-side"
     }
-    console.log(this.state)
+
     return (
       <div className="App container" style={this.props.style}>
         
