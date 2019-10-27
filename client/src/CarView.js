@@ -7,15 +7,10 @@ import CarMedia from './CarMedia'
 import SearchBar from './SearchBar';
 import Tags from './Tags'
 import { addCars } from "./js/actions/index";
-import { MobileView } from "react-device-detect";
+import { MobileView, isBrowser } from "react-device-detect";
 import ReactGA from 'react-ga';
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function initializeReactGA() {
   ReactGA.initialize('UA-150447549-1');
@@ -249,31 +244,40 @@ class CarView extends Component {
 
     let mobileStyle = { "textAlign" : "center" }
     
+    let styleSideBar = "media-card rounded"
+    let styleRight = ""
+    if(isBrowser){
+      styleSideBar = "sidebar media-card rounded"
+      styleRight = "right-side"
+    }
+    
     return (
       <div className="App container" style={this.props.style}>
-        <div className="sidebar media-card rounded">
-          <div className="iner-sidebar">
-            <button onClick={this.clickShowSearch} type="submit" className="btn dropdown-toggle btn-warning">Pretraga po parametrima</button>
-            <div style={styleSearch}>
-              <SearchBar />
-            </div>
+        
+          <div className={styleSideBar}>
+            <div className="iner-sidebar">
+              <button onClick={this.clickShowSearch} type="submit" className="btn dropdown-toggle btn-warning">Pretraga po parametrima</button>
+              <div style={styleSearch}>
+                <SearchBar />
+              </div>
 
-            <button onClick={this.clickShowTags} type="submit" className="btn dropdown-toggle btn-warning">Pretraga sa tagovima</button>        
-            <div style={styleTags}>
-              <Tags />  
-            </div>
+              <button onClick={this.clickShowTags} type="submit" className="btn dropdown-toggle btn-warning">Pretraga sa tagovima</button>        
+              <div style={styleTags}>
+                <Tags />  
+              </div>
 
-            <button onClick={this.clickForMe} type="submit" className="btn btn-warning">Preporucena kola</button>
-            <br/>
-            <Link to="/cmp">
-              <button onClick={this.clickCompare} type="submit" className="btn btn-warning btnComapre ">Poredi</button>
-            </Link>
+              <button onClick={this.clickForMe} type="submit" className="btn btn-warning">Preporucena kola</button>
+              <br/>
+              <Link to="/cmp">
+                <button onClick={this.clickCompare} type="submit" className="btn btn-warning btnComapre ">Poredi</button>
+              </Link>
+            </div>
           </div>
-        </div>
-
+        
+        
         <br/>
 
-        <div className="right-side">
+        <div className={styleRight}>
           <CarMedia />
 
           <div style={mobileStyle}>

@@ -111,7 +111,7 @@ class CarMedia extends Component {
                 <span className="form-check btnAddCmp">
                   <label  className="form-check-label" htmlFor="cmpCheck">
                     <input checked={this.state.isChecked[i]} onChange={this.clickAddComapre} value={i} type="checkbox" className="form-check-input" id="cmpCheck"/>
-                    Dodaj u poredjenje
+                    Dodaj u poređenje
                   </label>
                 </span>
               </div>

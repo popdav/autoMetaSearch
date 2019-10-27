@@ -5,16 +5,20 @@ import './App.css';
 import { connect } from "react-redux";
 import { addCmpCars } from "./js/actions/index"
 
+import { isMobile } from "react-device-detect";
+
 import CarView from './CarView'
 import CmpCars from './CmpCars'
+import Home from './Home'
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  // Link
 } from "react-router-dom";
 
+let logoPic = require('./ms-icon-310x310.png')
 
 class App extends Component {
   constructor(props) {
@@ -33,22 +37,40 @@ class App extends Component {
   }
 
   render() {
+
+    let styleTop = {"margin-top": "5%"}
+    if(isMobile){
+      styleTop = {"margin-top": "20%"}
+    }
     
     return (
       <Router>
-          <div className="App">
-            
-            
-            <Switch>
-              <Route exact path="/">
-                <CarView  />
-              </Route>
-              <Route path="/cmp">
-                <CmpCars />
-              </Route>
-            </Switch>
+        <nav class="navbar navbar-light bg-warning fixed-top">
+          
+          <a class="navbar-brand" href="/">
+            <img src={logoPic} width="30" height="30" alt=""/>
+            Početna
+          </a>
+          <a class="navbar-brand" href="/search">Pretraga <span aria-label="img" role="img">&#x1F50E;</span></a>
+                    
+        </nav>
 
-          </div>
+        
+          <Switch>
+            <Route exact path="/">
+              <Home/>
+            </Route>
+            <div style={styleTop} className="App">
+            <Route exact path="/search">
+              <CarView  />
+            </Route>
+            <Route path="/cmp">
+              <CmpCars />
+            </Route>
+            </div>
+          </Switch>
+
+        
       </Router>
         
     );

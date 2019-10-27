@@ -1,7 +1,23 @@
 /* .App {
-  margin-left: 10%;
-  margin-right: 10%; 
+  margin-top: 20%; 
 } */
+.homeSearch {
+  z-index: 10;
+  position: absolute;
+  margin-top: 10%;
+  margin-left: 20%;
+}
+.imgHome {
+  /* z-index: -10;
+  position: absolute; */
+}
+.footer{
+  margin-top: 2%;
+  margin-left: 40%;
+}
+.cmpCars{
+  margin-top: 1%;
+}
 .sidebar {
   min-width: 18%;
   max-width: 18%;
@@ -27,7 +43,7 @@
   /* Add shadows to create the "card" effect */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
-  background-color: rgb(255, 254, 254);
+  background-color: rgb(241, 234, 234);
 }
 .inder-media-card{
   padding: 1%;

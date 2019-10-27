@@ -21,7 +21,7 @@ class CmpCars extends Component {
     console.log(this.props)
     
     return (
-      <div className="App container" style={this.props.style}>
+      <div className="App container cmpCars" style={this.props.style}>
           <table className="table">
             <thead>
                 <tr>

@@ -4,6 +4,7 @@ import './App.css';
 import axios from 'axios'
 import { connect } from "react-redux";
 import { addSearchBody } from "./js/actions/index";
+import { Link } from "react-router-dom"
 
 
 class SearchBar extends Component {
@@ -78,6 +79,7 @@ class SearchBar extends Component {
         Model: this.state.selectedModel === 'None' ? undefined : this.state.selectedModel,
       }
     console.log(body)
+
     this.props.addSearchBody(body)
 
   }
@@ -114,7 +116,9 @@ class SearchBar extends Component {
             </div>
 
             <div className="form-group">
-                <button onClick={this.clickSearch} type="submit" className="btn btn-secondary mb-2">Pretraga</button>
+                <Link onClick={this.clickSearch} type="submit" className="btn btn-secondary mb-2" to="/search">
+                  Pretraga
+                </Link>
             </div>
             </form>
                 
