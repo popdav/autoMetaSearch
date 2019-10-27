@@ -10,6 +10,13 @@ import { addCars } from "./js/actions/index";
 import { MobileView } from "react-device-detect";
 import ReactGA from 'react-ga';
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 function initializeReactGA() {
   ReactGA.initialize('UA-150447549-1');
   ReactGA.pageview('/');
@@ -243,29 +250,39 @@ class CarView extends Component {
     let mobileStyle = { "textAlign" : "center" }
     
     return (
-      <div style={this.props.style}>
-        <nav className="navbar navbar-defaul">
-          <div className="">
+      <div className="App container" style={this.props.style}>
+        <div className="sidebar media-card rounded">
+          <div className="iner-sidebar">
             <button onClick={this.clickShowSearch} type="submit" className="btn dropdown-toggle btn-warning">Pretraga po parametrima</button>
+            <div style={styleSearch}>
+              <SearchBar />
+            </div>
+
             <button onClick={this.clickShowTags} type="submit" className="btn dropdown-toggle btn-warning">Pretraga sa tagovima</button>        
+            <div style={styleTags}>
+              <Tags />  
+            </div>
+
             <button onClick={this.clickForMe} type="submit" className="btn btn-warning">Preporucena kola</button>
+            <br/>
+            <Link to="/cmp">
+              <button onClick={this.clickCompare} type="submit" className="btn btn-warning btnComapre ">Poredi</button>
+            </Link>
           </div>
-        </nav>
-        <div style={styleSearch}>
-          <SearchBar />
         </div>
-        <div style={styleTags}>
-          <Tags />  
+
+        <br/>
+
+        <div className="right-side">
+          <CarMedia />
+
+          <div style={mobileStyle}>
+            <MobileView>
+              <button onClick={this.loadMore} type="submit" className="btn btn-primary mb-2">Učitaj još</button>
+            </MobileView>    
+          </div>
         </div>
         
-        <br/>
-        <CarMedia />
-
-        <div style={mobileStyle}>
-          <MobileView>
-            <button onClick={this.loadMore} type="submit" className="btn btn-primary mb-2">Učitaj još</button>
-          </MobileView>    
-        </div>
 
       </div>
     );

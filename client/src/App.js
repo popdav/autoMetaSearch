@@ -36,14 +36,11 @@ class App extends Component {
     
     return (
       <Router>
-          <div className="App container">
+          <div className="App">
             
             
             <Switch>
               <Route exact path="/">
-              <Link to="/cmp">
-                <button onClick={this.clickCompare} type="submit" className="btn btn-warning btnComapre fixed-top">Poredi</button>
-              </Link>
                 <CarView  />
               </Route>
               <Route path="/cmp">

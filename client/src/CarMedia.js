@@ -88,8 +88,9 @@ class CarMedia extends Component {
           <div className="" key={i}>
             
             <div className="media-card media rounded">
+              
               <img className="media-object img-thumbnail" src={elem['slika']} alt="Auto" />
-              <div className="media-body ">
+              <div className="media-body inder-media-card">
                 <h5 className="mt-0">{elem['Marka'] + ' ' + elem['Model'] }</h5>
                 <p>
                   
@@ -115,11 +116,9 @@ class CarMedia extends Component {
                 </span>
               </div>
             
+            </div>
+            <br />
           </div>
-          <br />
-        </div>
-          
-          
         )
       })}
       </div> 
