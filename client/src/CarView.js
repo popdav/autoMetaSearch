@@ -196,19 +196,13 @@ class CarView extends Component {
     axios.get('/getCarsForMe')
       .then((res) => {
         console.log(res.data)
-        if(res.data.length === 0){
-          alert('Niste koristili pretragu po tagovima!')
-        } else {
-          let carsNew = [...res.data.arr]
-          let newBody = {$or: [...res.data.query]}
-          this.setState({
-            cars: carsNew,
-            body: newBody
-          })
-          
-        }
-        
-
+        let carsNew = [...res.data.arr]
+        let newBody = {$or: [...res.data.query]}
+        this.setState({
+          cars: carsNew,
+          body: newBody
+        })
+        console.log(this.state)
       })
       .catch((err) => {
         console.log(err)
