@@ -1,78 +1,51 @@
-const express = require('express')
-const morgan = require('morgan')
-const bodyParser = require('body-parser')
-const methodOverride = require('method-override')
-const Mongo = require('mongodb')
+const express = require('express');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 const MongoService = require('./services/dbServices/mongo-select-service')
 const DbUniqueContent = require('./services/dbServices/db-unique-content-service')
-const SearchAnalyticsService = require('./services/dbServices/db-search-analytics-service');
-const requestIp = require('request-ip');
 const cookieParser = require('cookie-parser');
-const CHandler = require('./cookieHandler/cookie-handler');
+const CHandler = require('./services/userService/cookie-handler-service');
+const CookieService = require('./services/userService/cookie-service');
 
-const app = express()
+const app = express();
 
-const port = process.env.PORT || 5001
+const port = process.env.PORT || 5001;
 
-app.use(morgan('dev'))
-app.use(bodyParser.json())
+app.use(morgan('dev'));
+app.use(bodyParser.json());
 
 app.use(bodyParser.json({ limit: '100gb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '100gb', extended: true }));
 app.use(methodOverride());
 app.use(cookieParser());
 
-const DB = require('./database')
-const polovniModel = require('./models/PolovniAutomobili')
-const mojModel = require('./models/MojAuto')
 const mongoService = new MongoService();
 const dbUniqueContent = new DbUniqueContent();
-const searchAnalytics = new SearchAnalyticsService();
 const CookieHandler = new CHandler();
+const cookieService = new CookieService();
 
-app.get('/getCarsForMe', (req, res) => {
-    let status = req.cookies['status'];
-    if(status) {
-        let mostSearched = CookieHandler.getMostSearched(status);
-        res.send(mostSearched);
+app.get('/getCarsForMe', async (req, res) => {
+    let user = req.cookies['user'];
+    if (user) {
+        const arr = await cookieService.getUserCars(user);
+        res.send(arr);
     }
     else {
-        res.send([]);
+        console.log('trazi nesto');
     }
 });
 
 app.post('/smartSearch', async (req, res) => {
-    let previousState = req.cookies['status'];
-    let cookie;
-    if(previousState === undefined) {
-        cookie = CookieHandler.updateInformation(req.body.tags, []);
-    }
-    else {
-        cookie = CookieHandler.updateInformation(req.body.tags, previousState);
-    }
-    res.cookie('status', cookie, {maxAge: 360000});
     let result = await mongoService.smartSearch(req.body.tags, req.body.chunkNumber);
-    console.log(cookie);
-    res.send(result);
-
-});
-
-app.post('/personalizedSearch', async (req, res) => {
-    const clientIp = requestIp.getClientIp(req);
-
-    let tags = await searchAnalytics.selectUsersStatus(clientIp);
-    let result = await mongoService.smartSearch(tags, req.body.chunkNumber);
     res.send(result);
 });
 
 app.post('/findPolovni', async (req, res) => {
-    // console.log(req.body);
-    const clientIp = requestIp.getClientIp(req);
-    console.log('ADRESA JE : ' + clientIp);
-
+    const userId = await CookieHandler.handle(req);
     let result = await mongoService.select(req.body.findQuery, req.body.chunkNumber);
+    res.cookie('user', userId, {maxAge: 360000});
     res.send(result);
-
 });
 
 app.post('/makeUnique', async (req, res) => {
@@ -85,8 +58,6 @@ app.post('/modelUnique', async (req, res) => {
     const result = await dbUniqueContent.modelUnique(req.body.model);
     res.send(result.sort());
 });
-
-
 
 const server = app.listen(port, () => console.log(`Listening on port ${port}`))
 

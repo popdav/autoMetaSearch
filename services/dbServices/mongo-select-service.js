@@ -1,7 +1,5 @@
-const DB = require('../../database')
-const polovniModel = require('../../models/PolovniAutomobili')
-const mojModel = require('../../models/MojAuto')
-const Mongo = require('mongodb')
+const polovniModel = require('../../models/PolovniAutomobili');
+const mojModel = require('../../models/MojAuto');
 
 class MongoService {
 
@@ -81,9 +79,7 @@ class MongoService {
     async select(object, chunkNumber) {
 
         const [polovnArr, mojArr ] = [await this.selectPolovni(object, chunkNumber), await this.selectMoj(object, chunkNumber)];
-
         return  this.mergeArrays(polovnArr, mojArr);
-
     }
 
     async selectPolovni(object, chunkNumber) {
