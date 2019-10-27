@@ -68,7 +68,6 @@ class CookieService {
 
     async getUserCars(cookieUuid) {
         let user = await cookieUserModel.findOne({ cookieID: cookieUuid }, function(err,obj) {});
-        console.log(user.searches);
         let num;
         let query = [];
         let arr = [];
@@ -84,7 +83,6 @@ class CookieService {
             query.push(user.searches[randSearchQuery]);
         }
         arr.sort(() => Math.random() - 0.5);
-        console.log(query);
         return { arr, query };
     }
 }
