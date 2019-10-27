@@ -199,30 +199,13 @@ class CarView extends Component {
         if(res.data.length === 0){
           alert('Niste koristili pretragu po tagovima!')
         } else {
-          let arrTags = [...res.data]
-          console.log(res.data)
-          let body = {
-            tags: arrTags,
-            chunkNumber: 1
-          }
-          console.log(body)
-          axios.post('/smartSearch', body)
-          .then((res) => {
-            
-              this.setState({ 
-                cars: [...res.data],
-                tags: arrTags,
-                showSearch: false,
-                showTags: false
-              })
-              this.props.addCars(res.data)
-              console.log(res.data)
-            
-            
+          let carsNew = [...res.data.arr]
+          let newBody = {$or: [...res.data.query]}
+          this.setState({
+            cars: carsNew,
+            body: newBody
           })
-          .catch((err) => {
-            console.log(err)
-          })
+          
         }
         
 

@@ -38,20 +38,20 @@ class App extends Component {
 
   render() {
 
-    let styleTop = {"margin-top": "5%"}
+    let styleTop = {"marginTop": "5%"}
     if(isMobile){
-      styleTop = {"margin-top": "20%"}
+      styleTop = {"marginTop": "20%"}
     }
     
     return (
       <Router>
-        <nav class="navbar navbar-light bg-warning fixed-top">
+        <nav className="navbar navbar-light bg-warning fixed-top">
           
-          <a class="navbar-brand" href="/">
+          <a className="navbar-brand" href="/">
             <img src={logoPic} width="30" height="30" alt=""/>
             Početna
           </a>
-          <a class="navbar-brand" href="/search">Pretraga <span aria-label="img" role="img">&#x1F50E;</span></a>
+          <a className="navbar-brand" href="/search">Pretraga <span aria-label="img" role="img">&#x1F50E;</span></a>
                     
         </nav>
 
