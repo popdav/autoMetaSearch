@@ -3,13 +3,17 @@
   margin-right: 10%; 
 } */
 .btnComapre {
-  position: fixed; 
+  margin-top: 0.5%;
   margin-left: 72%;
 }
 .btnAddCmp {
   float:right;
 }
-
+.media-card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
 /* .media-car:hover{
   background-color: lightblue;
   opacity: 0.6;

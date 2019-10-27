@@ -87,7 +87,7 @@ class CarMedia extends Component {
           
           <div className="" key={i}>
             
-            <div className="media-car media border border-info rounded">
+            <div className="media-card media rounded">
               <img className="media-object img-thumbnail" src={elem['slika']} alt="Auto" />
               <div className="media-body ">
                 <h5 className="mt-0">{elem['Marka'] + ' ' + elem['Model'] }</h5>
@@ -108,8 +108,10 @@ class CarMedia extends Component {
                 </p>
                 <img onClick={()=> window.open(elem["link"], "_blank")} className="img-thumbnail btn" src={elem['logo']} alt="Auto" />
                 <span className="form-check btnAddCmp">
-                  <input checked={this.state.isChecked[i]} onChange={this.clickAddComapre} value={i} type="checkbox" className="form-check-input" id="cmpCheck"/>
-                  <label  className="form-check-label" htmlFor="cmpCheck">Dodaj u poredjenje</label>
+                  <label  className="form-check-label" htmlFor="cmpCheck">
+                    <input checked={this.state.isChecked[i]} onChange={this.clickAddComapre} value={i} type="checkbox" className="form-check-input" id="cmpCheck"/>
+                    Dodaj u poredjenje
+                  </label>
                 </span>
               </div>
             

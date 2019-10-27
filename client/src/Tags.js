@@ -70,20 +70,21 @@ class Tags extends Component {
     
     
     return (
-      <div>
+      <div className="media-card">
         <form className="form">
+       
           {this.state.allTags.map((e, i) => {
               return(
-                  <div key={e}>
-                    <input checked={this.state.isChecked[e]} onChange={this.addTag} className="form-check-input" type="checkbox" name={e}  />
-                    {e}
-                  </div>
-                
-                
+                <div key={e+i} className="form-check">
+                  
+                  <input id={e + i} checked={this.state.isChecked[e]} onChange={this.addTag} className="form-check-input" type="checkbox" name={e}  />
+                  <label htmlFor={e + i} key={e}>{e}</label>
+                </div>
               )
           })}
+         
           <div className="form-group">
-            <button onClick={this.clickSearch} type="submit" className="btn btn-primary mb-2">Pretraga</button>
+            <button onClick={this.clickSearch} type="submit" className="btn btn-secondary mb-2">Pretraga</button>
           </div>
         </form>
         

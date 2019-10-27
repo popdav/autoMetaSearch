@@ -85,7 +85,7 @@ class SearchBar extends Component {
   render() {
     
     return (
-        <div className="" >
+        <div className="media-card" >
 
             <form className="form search-bar">
             
@@ -114,7 +114,7 @@ class SearchBar extends Component {
             </div>
 
             <div className="form-group">
-                <button onClick={this.clickSearch} type="submit" className="btn btn-primary mb-2">Pretraga</button>
+                <button onClick={this.clickSearch} type="submit" className="btn btn-secondary mb-2">Pretraga</button>
             </div>
             </form>
                 

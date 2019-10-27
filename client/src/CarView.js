@@ -244,13 +244,13 @@ class CarView extends Component {
     
     return (
       <div style={this.props.style}>
-        <button onClick={this.clickShowSearch} type="submit" className="btn btn-primary mb-2">Pretraga po parametrima</button>
-        <span>{" "}</span>
-        <button onClick={this.clickShowTags} type="submit" className="btn btn-primary mb-2">Pretraga sa tagovima</button>
-        <span>{" "}</span>
-        <button onClick={this.clickForMe} type="submit" className="btn btn-primary mb-2">Preporucena kola</button>
-        <br/>
-        
+        <nav className="navbar navbar-defaul">
+          <div className="">
+            <button onClick={this.clickShowSearch} type="submit" className="btn dropdown-toggle btn-warning">Pretraga po parametrima</button>
+            <button onClick={this.clickShowTags} type="submit" className="btn dropdown-toggle btn-warning">Pretraga sa tagovima</button>        
+            <button onClick={this.clickForMe} type="submit" className="btn btn-warning">Preporucena kola</button>
+          </div>
+        </nav>
         <div style={styleSearch}>
           <SearchBar />
         </div>

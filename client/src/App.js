@@ -42,7 +42,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/">
               <Link to="/cmp">
-                <button onClick={this.clickCompare} type="submit" className="btn btn-primary mb-2 btnComapre">Poredi</button>
+                <button onClick={this.clickCompare} type="submit" className="btn btn-warning btnComapre fixed-top">Poredi</button>
               </Link>
                 <CarView  />
               </Route>

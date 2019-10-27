@@ -30,18 +30,34 @@ class CmpCars extends Component {
                     <th scope="col">Modela</th>
                     <th scope="col">Snaga</th>
                     <th scope="col">Cena</th>
+                    <th scope="col">Kilometraža</th>
+                    <th scope="col">Godište</th>
+                    <th scope="col">Gorivo</th>
+                    <th scope="col">Karoserija</th>
+                    <th scope="col">Kubikaža</th>
+
                 </tr>
             </thead>
             <tbody>
             {
                 this.props.cmpCarList.map((e, i) => {
+                  let cena = '0'
+                  if(e['cena'] === -1) 
+                    cena = 'Dogovor'
+                  else 
+                    cena = e['cena'] + '€'
                     return(
                         <tr key={i}>
                             <td> <img className="media-object img-thumbnail" src={e['slika']} alt="Auto" /> </td>
                             <td >{e['Marka']}</td>
                             <td>{e['Model']}</td>
-                            <td>{e['Snaga motora']}</td>
-                            <td>{e['cena']}</td>
+                            <td>{e['Snaga motora'] + ' KS (' + Math.ceil(e['Snaga motora'] * 0.745699872) + ' KW)'}</td>
+                            <td>{cena}</td>
+                            <td>{e['Kilometraža'] + ' km'}</td>
+                            <td>{e['Godište'] + '.'}</td>
+                            <td>{e['Gorivo']}</td>
+                            <td>{e['Karoserija']}</td>
+                            <td>{e['Kubikaža'] + ' cm3'}</td>
                         </tr>
                             
                     )
